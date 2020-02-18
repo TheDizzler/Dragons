@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static AtomosZ.Dragons.Deck;
 
 namespace AtomosZ.Dragons
 {
 	public class Player : MonoBehaviour
 	{
+		public int funds = 100;
+		public int amountPaidOfRaise = 0;
+
 		[SerializeField] private HandVisualizer handPanel = null;
 
 		private List<Card> hand = new List<Card>();
@@ -15,8 +17,7 @@ namespace AtomosZ.Dragons
 		public void AddCardToHand(Card newcard)
 		{
 			hand.Add(newcard);
-			handPanel.DisplayNewCard(newcard);
-			CheckScore();
+			handPanel.DisplayNewCard(newcard, this);
 		}
 
 		private void CheckScore()
@@ -42,25 +43,37 @@ namespace AtomosZ.Dragons
 			}
 
 			string valueCheck = "";
+			int best = 0;
 			foreach (KeyValuePair<Suit, int> kvp in scores)
 			{
 				valueCheck += kvp.Key + " = " + (kvp.Value * dragonCount) + ";";
+				if ((kvp.Value * dragonCount) > best)
+				{
+					best = kvp.Value * dragonCount;
+				}
 			}
 
 			if (dragonCount == 6)
+			{
 				valueCheck = "Dragon Strike! 50 points!";
+				best = 50;
+			}
+
+			handPanel.SetScore(best);
 
 			Debug.Log(valueCheck);
 		}
 
-		public bool EndTurn()
+		public void EndTurn()
 		{
-			if (hand.Count > Rules.MaxCardsInHand)
-			{
-				return false;
-			}
+			handPanel.SetActiveTurn(false);
+			CheckScore();
+			//if (hand.Count > Rules.MaxCardsInHand)
+			//{
+			//	return false;
+			//}
 
-			return true;
+			//return true;
 		}
 
 		public void RemoveCards(List<CardInHand> cardsSelected)
@@ -75,6 +88,12 @@ namespace AtomosZ.Dragons
 
 				handPanel.RemoveCard(inHand);
 			}
+		}
+
+		public void StartTurn()
+		{
+			handPanel.SetActiveTurn(true);
+			CheckScore();
 		}
 	}
 }

@@ -9,10 +9,13 @@ namespace AtomosZ.Dragons
 	/// </summary>
 	public class Dealer : MonoBehaviour
 	{
+		public int totalBets = 0;
+		public int totalRaise = 0;
+
 		[SerializeField] private Deck deck = null;
 		[SerializeField] private List<Player> players = null;
 
-		private Player currentPlayer;
+		private int currentPlayerIndex;
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
 
 
@@ -32,9 +35,14 @@ namespace AtomosZ.Dragons
 		public void ReplaceCards()
 		{
 			int cardCount = cardsSelected.Count;
-			currentPlayer.RemoveCards(cardsSelected);
+			players[currentPlayerIndex].RemoveCards(cardsSelected);
 			cardsSelected.Clear();
-			StartCoroutine(DealCardsTo(cardCount, currentPlayer));
+			StartCoroutine(DealCardsTo(cardCount, players[currentPlayerIndex]));
+		}
+
+		public Player GetCurrentPlayer()
+		{
+			return players[currentPlayerIndex];
 		}
 
 
@@ -80,6 +88,24 @@ namespace AtomosZ.Dragons
 				yield return new WaitForSeconds(.5f);
 				player.AddCardToHand(deck.DrawCard());
 			}
+
+			NextPlayer();
+		}
+
+		private void NextPlayer()
+		{
+			if (deck.InsufficientCards(1))
+			{
+				// end game
+				Debug.Log("No more cards; End game.");
+				
+				return;
+			}
+			
+			players[currentPlayerIndex++].EndTurn();
+			if (currentPlayerIndex >= players.Count)
+				currentPlayerIndex = 0;
+			players[currentPlayerIndex].StartTurn();
 		}
 
 		/// <summary>
@@ -96,7 +122,8 @@ namespace AtomosZ.Dragons
 				}
 			}
 
-			currentPlayer = players[0];
+			currentPlayerIndex = 0;
+			players[currentPlayerIndex].StartTurn();
 		}
 	}
 }

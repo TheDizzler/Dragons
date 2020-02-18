@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static AtomosZ.Dragons.Deck;
 using Color = UnityEngine.Color;
 
 namespace AtomosZ.Dragons
@@ -15,6 +13,7 @@ namespace AtomosZ.Dragons
 		private static Color NormalColor = Color.white;
 
 		private Dealer dealer;
+		private Player owner;
 		private Card card;
 		private float selectSlideSpeed = 50f;
 		private float startPosY;
@@ -35,9 +34,16 @@ namespace AtomosZ.Dragons
 			return card;
 		}
 
-		public void SetCard(Card crd)
+		public void SetCard(Card crd, Player player)
 		{
 			card = crd;
+			owner = player;
+		}
+
+		void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
+		{
+			if (owner == dealer.GetCurrentPlayer())
+				Select();
 		}
 
 		/// <summary>
@@ -68,7 +74,7 @@ namespace AtomosZ.Dragons
 				isSelected = false;
 				GetComponent<Image>().color = NormalColor;
 				sliding = StartCoroutine(SlideDown());
-				dealer.UnsetCardSelected(this);				
+				dealer.UnsetCardSelected(this);
 			}
 
 		}
@@ -85,10 +91,7 @@ namespace AtomosZ.Dragons
 			GetComponent<Image>().color = Color.white;
 		}
 
-		void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
-		{
-			Select();
-		}
+
 
 		private IEnumerator SlideUp()
 		{
