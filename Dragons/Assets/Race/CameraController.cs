@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
 
 	public void LateUpdate()
 	{
-		trans.localPosition = focus.transform.localPosition + focus.transform.forward * -10;
+		trans.localPosition = focus.transform.localPosition + focus.transform.forward * -20;
 		cam.transform.LookAt(focus.transform);
 	}
 }

@@ -55,6 +55,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _RainbowTex:
+        m_Texture: {fileID: 2800000, guid: 6c9f5a9567fe0ed48badf7e8483e15fd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _mainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -62,6 +66,7 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
+    - _DeltaTime: 0.0165689
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
@@ -73,11 +78,16 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 0.29
+    - _Speed: 0.034084786
     - _SrcBlend: 1
+    - _Time: 0
+    - _TimeInRainbow: 31.354904
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 0.7411765, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EndColor: {r: 0, g: 0.56378937, b: 1, a: 1}
+    - _StartColor: {r: 0, g: 0.17447233, b: 1, a: 1}
+    - _TimeInRainbow: {r: 0, g: 0, b: 0, a: 0}
     - _color: {r: 1, g: 1, b: 1, a: 1}
