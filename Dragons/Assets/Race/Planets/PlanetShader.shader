@@ -19,25 +19,25 @@
 			struct vertexInput
 			{
 				float4 vertex : POSITION;
-				float4 texcoord : TEXCOORD0;
+				float4 uv : TEXCOORD0;
 			};
 
-			struct vertexOutput
+			struct v2f
 			{
 				float4 pos : SV_POSITION;
 				float4 tex : TEXCOORD0;
 			};
 
-			vertexOutput vert(vertexInput input)
+			v2f vert(vertexInput input)
 			{
-				vertexOutput output;
+				v2f output;
 
-				output.tex = input.texcoord;
+				output.tex = input.uv;
 				output.pos = UnityObjectToClipPos(input.vertex);
 				return output;
 			}
 
-			float4 frag(vertexOutput input) : COLOR
+			float4 frag(v2f input) : COLOR
 			{
 				return tex2D(_MainTex, input.tex.xy);
 			}

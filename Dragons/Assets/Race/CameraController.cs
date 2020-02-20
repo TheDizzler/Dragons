@@ -1,21 +1,29 @@
 ﻿using UnityEngine;
 
-public class CameraController : MonoBehaviour
+namespace AtomosZ.Gambale.Keiba
 {
-	public GameObject focus;
-	private Camera cam;
-	private Transform trans;
-
-
-	public void Start()
+	public class CameraController : MonoBehaviour
 	{
-		cam = GetComponent<Camera>();
-		trans = transform;
-	}
+		public GameObject focus;
+		private Camera cam;
+		private Transform trans;
 
-	public void LateUpdate()
-	{
-		trans.localPosition = focus.transform.localPosition + focus.transform.forward * -20;
-		cam.transform.LookAt(focus.transform);
+
+		public void Start()
+		{
+			cam = GetComponent<Camera>();
+			trans = transform;
+		}
+
+		public void LateUpdate()
+		{
+			trans.localPosition = focus.transform.localPosition + focus.transform.forward * -20;
+			cam.transform.LookAt(focus.transform);
+		}
+
+		public void SetFocus(GameObject newFocus)
+		{
+			focus = newFocus;
+		}
 	}
 }

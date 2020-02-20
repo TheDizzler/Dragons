@@ -1,45 +1,48 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class EchoEffect : MonoBehaviour
+namespace AtomosZ.Gambale.Keiba
 {
-	public float startTimeBetweenSpawns;
-	public int numEchoSpawns = 3;
-
-	public GameObject echoPrefab;
-
-
-	private float timeBetweenSpawns;
-	private List<SpriteRenderer> echos = new List<SpriteRenderer>();
-	private int nextEcho = 0;
-	private SpriteRenderer spriteRenderer;
-
-
-
-	public void Start()
+	public class EchoEffect : MonoBehaviour
 	{
-		spriteRenderer = GetComponent<SpriteRenderer>();
-		for (int i = 0; i < numEchoSpawns; ++i)
-			echos.Add(Instantiate(echoPrefab).GetComponent<SpriteRenderer>());
-		timeBetweenSpawns = startTimeBetweenSpawns;
-	}
+		public float startTimeBetweenSpawns;
+		public int numEchoSpawns = 3;
 
-	public void Update()
-	{
-		if (timeBetweenSpawns <= 0)
+		public GameObject echoPrefab;
+
+
+		private float timeBetweenSpawns;
+		private List<SpriteRenderer> echos = new List<SpriteRenderer>();
+		private int nextEcho = 0;
+		private SpriteRenderer spriteRenderer;
+
+
+
+		public void Start()
 		{
-			if (++nextEcho >= echos.Count)
-			{
-				nextEcho = 0;
-			}
-
-			echos[nextEcho].sprite = spriteRenderer.sprite;
-			echos[nextEcho].transform.localPosition = transform.localPosition;
-			echos[nextEcho].transform.localRotation = transform.localRotation;
+			spriteRenderer = GetComponent<SpriteRenderer>();
+			for (int i = 0; i < numEchoSpawns; ++i)
+				echos.Add(Instantiate(echoPrefab).GetComponent<SpriteRenderer>());
 			timeBetweenSpawns = startTimeBetweenSpawns;
 		}
-		else
-			timeBetweenSpawns -= Time.deltaTime;
 
+		public void Update()
+		{
+			if (timeBetweenSpawns <= 0)
+			{
+				if (++nextEcho >= echos.Count)
+				{
+					nextEcho = 0;
+				}
+
+				echos[nextEcho].sprite = spriteRenderer.sprite;
+				echos[nextEcho].transform.localPosition = transform.localPosition;
+				echos[nextEcho].transform.localRotation = transform.localRotation;
+				timeBetweenSpawns = startTimeBetweenSpawns;
+			}
+			else
+				timeBetweenSpawns -= Time.deltaTime;
+
+		}
 	}
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Dealer
   - Planet
+  - Racer
   layers:
   - Default
   - TransparentFX

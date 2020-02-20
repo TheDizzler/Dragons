@@ -78,10 +78,10 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 0.12318841
+    - _Speed: 1.0999997
     - _SrcBlend: 1
     - _Time: 0
-    - _TimeInRainbow: 31.59083
+    - _TimeInRainbow: 55.6234
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

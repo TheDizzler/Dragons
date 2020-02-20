@@ -10,7 +10,6 @@
 
 		SubShader
 		{
-			Cull Off
 			Blend One OneMinusSrcAlpha
 
 			Pass
@@ -52,12 +51,12 @@
 				{
 					half4 c = tex2D(_MainTex, i.uv);
 					c.rgb *= c.a;
-					if (_Speed > 1.0)
+					if (_Speed > 11.0)
 					{
 						// start rainbow mode
 						half2 rainpos = i.vertex.xy;
-						rainpos.x += (_TimeInRainbow * _Speed * 2);
-						rainpos.y += (_TimeInRainbow * _Speed * .125);
+						rainpos.x += (_TimeInRainbow * _Speed * .02);
+						rainpos.y += (_TimeInRainbow * _Speed * .0125);
 						c.rgb = tex2D(_RainbowTex, rainpos).rgb;
 					}
 					else if (c.a >= .1)
