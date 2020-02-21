@@ -10,11 +10,16 @@
 
 		SubShader
 		{
+			cull off
 			Blend One OneMinusSrcAlpha
+
 
 			Pass
 			{
+				AlphaToMask On
+
 				CGPROGRAM
+				
 
 				#pragma vertex vertexFunc
 				#pragma fragment fragmentFunc

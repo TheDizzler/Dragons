@@ -19,29 +19,32 @@ namespace AtomosZ.Gambale.Keiba
 		[SerializeField] private GameObject speedTrailsSmall = null;
 		[SerializeField] private GameObject speedTrailsBig = null;
 		[SerializeField] private GameObject particles = null;
+
 		private EchoEffect echo = null;
 		private Material horseMat = null;
 		private Animator anim;
-		private Transform planet;
 		private float timeInRainbow = 0;
 		private float randomizeTime = timeToRandomize;
+
+		public Waypoint nextWaypoint;
 
 
 		public void Start()
 		{
-			horseMat = GetComponent<SpriteRenderer>().sharedMaterial;
-			anim = GetComponent<Animator>();
-			planet = GameObject.FindGameObjectWithTag("Planet").transform;
-			echo = GetComponent<EchoEffect>();
-			//currentSpeed = 0;
-			//currentAcceleration = 0;
+			anim = GetComponentInChildren<Animator>();
+			echo = GetComponentInChildren<EchoEffect>();
+			horseMat = GetComponentInChildren<SpriteRenderer>().sharedMaterial;
+
 			this.enabled = false;
 			anim.enabled = false;
+			nextWaypoint = RaceManager.FirstWaypoint;
+			//Vector3 moveTowards = nextWaypoint.transform.position;
+			//moveTowards.z = transform.position.z;
+			//transform.LookAt(moveTowards);
 		}
 
 		public void StartRace()
 		{
-			//currentAcceleration = startAcceleration;
 			this.enabled = true;
 			anim.enabled = true;
 		}
@@ -62,9 +65,23 @@ namespace AtomosZ.Gambale.Keiba
 
 			CheckForSpeedEffects(currentSpeed);
 
-			transform.localPosition += transform.right * currentSpeed * 20 * Time.deltaTime;
-			Vector3 dirToPlanet = planet.position - transform.position;
-			transform.LookAt(planet.position);
+			transform.localPosition += transform.forward * currentSpeed * 20 * Time.deltaTime;
+			if (Vector3.Distance(nextWaypoint.transform.position, transform.position) < 20)
+			{
+				nextWaypoint = nextWaypoint.next;
+				if (nextWaypoint == null)
+				{
+					// finished!
+					enabled = false;
+					return;
+				}
+			}
+
+			Vector3 dirToWaypoint = nextWaypoint.transform.position - transform.position;
+			Vector3 moveTowards = nextWaypoint.transform.position;
+			moveTowards.y = transform.position.y;
+			transform.LookAt(moveTowards);
+			Debug.DrawRay(transform.position, dirToWaypoint);
 		}
 
 		private void CheckForSpeedEffects(float currentSpeed)
