@@ -7,15 +7,16 @@ namespace AtomosZ.Gambale.Keiba
 	{
 		public bool started = false;
 		public List<GameObject> startPlaceHolders = new List<GameObject>();
+		[SerializeField] private Ranking ranking = null;
 
 		private BoxCollider finishLine;
-		private List<Horse> ranking = new List<Horse>();
+		
 
 
 		public void Start()
 		{
 			finishLine = GetComponent<BoxCollider>();
-			foreach(GameObject placeHolder in startPlaceHolders)
+			foreach (GameObject placeHolder in startPlaceHolders)
 				Destroy(placeHolder);
 		}
 
@@ -23,10 +24,9 @@ namespace AtomosZ.Gambale.Keiba
 		{
 			if (started && other.CompareTag("Racer"))
 			{
-					Debug.Log("Racer found: " + other.GetComponent<Horse>().name);
+				Debug.Log("Racer found: " + other.GetComponent<Horse>().name);
+				ranking.RacerFinished(other.GetComponent<Horse>());
 			}
 		}
-
-
 	}
 }

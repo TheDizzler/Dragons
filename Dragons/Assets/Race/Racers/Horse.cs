@@ -7,13 +7,9 @@ namespace AtomosZ.Gambale.Keiba
 	{
 		private const float timeToRandomize = 2.5f;
 
-		//public float maxAcceleration = 1f;
-		//public float maxSpeed = 25f;
+		public int number;
 		public float baseSpeed = 1f;
-		//public float startAcceleration = .025f;
-		//public float currentAcceleration = 0;
 		public float speedBoost = 1;
-		//public float currentSpeed = 0;
 		public int luck = 0;
 
 		[SerializeField] private GameObject speedTrailsSmall = null;
@@ -38,9 +34,6 @@ namespace AtomosZ.Gambale.Keiba
 			this.enabled = false;
 			anim.enabled = false;
 			nextWaypoint = RaceManager.FirstWaypoint;
-			//Vector3 moveTowards = nextWaypoint.transform.position;
-			//moveTowards.z = transform.position.z;
-			//transform.LookAt(moveTowards);
 		}
 
 		public void StartRace()

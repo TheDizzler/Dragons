@@ -78,7 +78,7 @@ namespace AtomosZ.Gambale.Keiba
 				racer.StartRace();
 
 			while (time < 6)
-			{
+			{ // just a little delay so racers aren't considered finished before they start
 				yield return null;
 				time += Time.deltaTime;
 			}
