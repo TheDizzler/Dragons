@@ -24,13 +24,16 @@ namespace AtomosZ.Gambale.Keiba
 		 *		Across The Board	- pick 1st, 2nd, or 3rd (any order)
 		 * */
 
+		public enum WagerType { Win, Place, Show };
+		private static Color SelectedColor = Color.black;
+		private static Color UnselectedColor = new Color(.75f, .75f, .75f, .75f);
+
 		[SerializeField] private Slider wagerTypeSlider = null;
 		[SerializeField] private TextMeshProUGUI winLabel = null;
 		[SerializeField] private TextMeshProUGUI placeLabel = null;
 		[SerializeField] private TextMeshProUGUI showLabel = null;
-
-		private static Color SelectedColor = Color.black;
-		private static Color UnselectedColor = new Color(.75f, .75f, .75f, .75f);
+		
+		private WagerType type = WagerType.Win;
 
 
 		public void WagerTypeSliderChanged()
@@ -51,6 +54,12 @@ namespace AtomosZ.Gambale.Keiba
 					showLabel.color = SelectedColor;
 					break;
 			}
+			type = (WagerType)wagerTypeSlider.value;
+		}
+
+		public WagerType GetWagerType()
+		{
+			return type;
 		}
 	}
 }

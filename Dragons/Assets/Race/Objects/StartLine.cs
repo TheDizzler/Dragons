@@ -16,8 +16,6 @@ namespace AtomosZ.Gambale.Keiba
 		public void Start()
 		{
 			finishLine = GetComponent<BoxCollider>();
-			foreach (GameObject placeHolder in startPlaceHolders)
-				Destroy(placeHolder);
 		}
 
 		public void OnTriggerEnter(Collider other)

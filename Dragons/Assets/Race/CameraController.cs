@@ -6,11 +6,13 @@ namespace AtomosZ.Gambale.Keiba
 	public class CameraController : MonoBehaviour
 	{
 		[SerializeField] private Transform focus;
-		[SerializeField]
-		[Range(0.01f, 1.0f)]
-		private float smoothFactor = .5f;
-		public float scrollDamp = 6;
-		public float scrollSpeed = 5;
+		[SerializeField] private float inputSensitivity = 50.0f;
+		[SerializeField] private float clampAngle = 90;
+		//[SerializeField]
+		//[Range(0.01f, 1.0f)]
+		//private float smoothFactor = .5f;
+		//public float scrollDamp = 6;
+		//public float scrollSpeed = 5;
 
 		private Camera cam;
 		private Transform trans;
@@ -18,11 +20,13 @@ namespace AtomosZ.Gambale.Keiba
 		private Coroutine panning;
 
 		private bool rotateAroundFocus = false;
-		private float rotationSpeed = 5.0f;
+
 		private Vector3 cameraOffset;
-		private float yRot = 0;
-		private float xRot = 0;
-		private float cameraDistance = 10;
+		private float rotY = 0;
+		private float rotX = 0;
+		private Vector3 prevPos;
+
+		//private float cameraDistance = 10;
 
 
 
@@ -30,49 +34,51 @@ namespace AtomosZ.Gambale.Keiba
 		{
 			cam = GetComponent<Camera>();
 			trans = transform;
-			//StartCoroutine(PanToSmoothly(focus));
-			trans.position = focus.position;
-			trans.localEulerAngles = focus.localEulerAngles;
+			rotY = trans.localRotation.eulerAngles.y;
+			rotX = trans.localRotation.eulerAngles.x;
+			StartCoroutine(PanToSmoothly(focus, 10));
+			Cursor.lockState = CursorLockMode.Confined;
+			//trans.position = focus.position;
+			//trans.localEulerAngles = focus.localEulerAngles;
 		}
 
 		public void Update()
 		{
+			if (Input.GetMouseButtonDown(1))
+				prevPos = cam.ScreenToViewportPoint(Input.mousePosition);
 			rotateAroundFocus = Input.GetKey(KeyCode.Mouse1);
 		}
 
 		public void LateUpdate()
 		{
 			if (follow)
-			{// was trying: https://www.youtube.com/watch?v=bVo0YLLO43s
+			{
 				if (rotateAroundFocus)
 				{
-					xRot += Input.GetAxis("Mouse X") * rotationSpeed;
-					yRot += Input.GetAxis("Mouse Y") * rotationSpeed;
-					yRot = Mathf.Clamp(yRot, 0, 90);
+					Vector3 dir = prevPos - cam.ScreenToViewportPoint(Input.mousePosition);
+					trans.position = focus.localPosition;
+					trans.Rotate(Vector3.right, dir.y * 180);
+					trans.Rotate(Vector3.up, -dir.x * 180, Space.World);
+					trans.Translate(new Vector3(0, 0, -10));
 
+					prevPos = cam.ScreenToViewportPoint(Input.mousePosition);
 					//Quaternion camTurnAngle = Quaternion.AngleAxis(
 					//	Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up)
 					//		* Quaternion.AngleAxis(yRot, Vector3.right);
 					//cameraOffset = camTurnAngle * cameraOffset;
 				}
 
-				float scrollAmount = Input.GetAxis("Mouse ScrollWheel");
-				if (scrollAmount != 0)
-				{
-					scrollAmount *= scrollSpeed * cameraDistance * .3f;
-					cameraDistance += scrollAmount * -1f;
-					cameraDistance = Mathf.Clamp(cameraDistance, 1.5f, 25f);
-				}
+				//float scrollAmount = Input.GetAxis("Mouse ScrollWheel");
+				//if (scrollAmount != 0)
+				//{
+				//	scrollAmount *= scrollSpeed * cameraDistance * .3f;
+				//	cameraDistance += scrollAmount * -1f;
+				//	cameraDistance = Mathf.Clamp(cameraDistance, 1.5f, 25f);
+				//}
 
 				//trans.localPosition = Vector3.Slerp(
 				//	transform.position, focus.position + cameraOffset, smoothFactor);
 				//trans.LookAt(focus);
-
-				Quaternion qt = Quaternion.Euler(yRot, xRot, 0);
-				trans.rotation = Quaternion.Lerp(trans.rotation, qt, Time.deltaTime * smoothFactor);
-
-				trans.position = new Vector3(0, 0, Mathf.Lerp(trans.position.z, cameraDistance * -1, Time.deltaTime * scrollDamp));
-
 
 			}
 		}
@@ -86,18 +92,24 @@ namespace AtomosZ.Gambale.Keiba
 		public void SetFocusSmooth(Transform newFocus)
 		{
 			if (this.enabled == false)
+			{
 				return;
+			}
+
 			if (panning != null)
+			{
 				StopCoroutine(panning);
+			}
+
 			follow = false;
 			panning = StartCoroutine(PanToSmoothly(newFocus));
 		}
 
-		private IEnumerator PanToSmoothly(Transform newFocus)
+		private IEnumerator PanToSmoothly(Transform newFocus, float travelTime = 3)
 		{
 			focus = newFocus;
 			float time = 0;
-			float timeToPan = 3;
+			float timeToPan = travelTime;
 
 			while (time < timeToPan)
 			{
@@ -112,10 +124,12 @@ namespace AtomosZ.Gambale.Keiba
 			}
 
 			trans.localPosition = newFocus.position + newFocus.transform.right * -20;
+			rotY = trans.localRotation.eulerAngles.y;
+			rotX = trans.localRotation.eulerAngles.x;
 			cam.transform.LookAt(focus);
 			follow = true;
 			panning = null;
-			cameraOffset = transform.position - focus.position;
+			cameraOffset = trans.position - focus.position;
 		}
 	}
 }
