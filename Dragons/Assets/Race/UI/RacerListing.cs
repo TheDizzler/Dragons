@@ -1,9 +1,19 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class RacerListing : MonoBehaviour
+namespace AtomosZ.Gambale.Keiba
 {
-	public string racerName;
-	public Text nameText;
-	public Image racerImage;
+	public class RacerListing : MonoBehaviour
+	{
+		public string racerName;
+		public Text nameText;
+		public Image racerImage;
+		public Horse horse;
+
+
+		public void ToggleChanged(bool toggled)
+		{
+			GetComponentInParent<RacerSelectDisplay>().SetSelected(horse, toggled);
+		}
+	}
 }

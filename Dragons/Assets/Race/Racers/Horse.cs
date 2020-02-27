@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace AtomosZ.Gambale.Keiba
@@ -11,6 +12,7 @@ namespace AtomosZ.Gambale.Keiba
 		public float baseSpeed = 1f;
 		public float speedBoost = 1;
 		public int luck = 0;
+		public Image portrait;
 
 		[SerializeField] private GameObject speedTrailsSmall = null;
 		[SerializeField] private GameObject speedTrailsBig = null;
@@ -31,6 +33,7 @@ namespace AtomosZ.Gambale.Keiba
 			echo = GetComponentInChildren<EchoEffect>();
 			horseMat = GetComponentInChildren<SpriteRenderer>().sharedMaterial;
 
+			gameObject.SetActive(false);
 			this.enabled = false;
 			anim.enabled = false;
 			nextWaypoint = RaceManager.FirstWaypoint;
@@ -58,7 +61,7 @@ namespace AtomosZ.Gambale.Keiba
 
 			CheckForSpeedEffects(currentSpeed);
 
-			transform.localPosition += transform.forward * currentSpeed * 20 * Time.deltaTime;
+			//transform.localPosition += transform.forward * currentSpeed * 20 * Time.deltaTime;
 			if (Vector3.Distance(nextWaypoint.transform.position, transform.position) < 20)
 			{
 				nextWaypoint = nextWaypoint.next;
