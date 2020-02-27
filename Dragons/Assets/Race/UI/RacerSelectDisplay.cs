@@ -8,6 +8,7 @@ namespace AtomosZ.Gambale.Keiba
 	public class RacerSelectDisplay : MonoBehaviour
 	{
 		[SerializeField] private GameObject racerTogglePrefab = null;
+		[SerializeField] private Transform scrollviewContent = null;
 		[SerializeField] private Button placeBetButton = null;
 		private List<Horse> selections = new List<Horse>();
 
@@ -17,7 +18,7 @@ namespace AtomosZ.Gambale.Keiba
 			ToggleGroup toggleGroup = GetComponent<ToggleGroup>();
 			foreach (Horse racer in racers)
 			{
-				GameObject newToggle = Instantiate(racerTogglePrefab, this.transform);
+				GameObject newToggle = Instantiate(racerTogglePrefab, scrollviewContent);
 				RacerListing listing = newToggle.GetComponent<RacerListing>();
 				listing.racerName = listing.nameText.text = listing.name = racer.name;
 				listing.racerImage = racer.portrait;

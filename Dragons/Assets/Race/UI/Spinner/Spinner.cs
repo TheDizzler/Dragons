@@ -33,5 +33,13 @@ namespace AtomosZ.UI
 			currentValue -= valueChange;
 			inputField.text = "$" + currentValue;
 		}
+
+		/// <summary>
+		/// When textbox is manually changed.
+		/// </summary>
+		public void OnTextChanged()
+		{
+			currentValue = int.Parse(inputField.text);
+		}
 	}
 }
