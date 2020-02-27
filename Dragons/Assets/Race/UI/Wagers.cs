@@ -32,8 +32,15 @@ namespace AtomosZ.Gambale.Keiba
 		[SerializeField] private TextMeshProUGUI winLabel = null;
 		[SerializeField] private TextMeshProUGUI placeLabel = null;
 		[SerializeField] private TextMeshProUGUI showLabel = null;
-		
+
 		private WagerType type = WagerType.Win;
+
+		public void OnEnable()
+		{
+			winLabel.color = UnselectedColor;
+			placeLabel.color = UnselectedColor;
+			showLabel.color = UnselectedColor;
+		}
 
 
 		public void WagerTypeSliderChanged()

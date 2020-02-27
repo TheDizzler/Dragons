@@ -27,5 +27,11 @@ namespace AtomosZ.UI
 			currentValue += valueChange;
 			inputField.text = "$" + currentValue;
 		}
+
+		public void DownButtonPushed()
+		{
+			currentValue -= valueChange;
+			inputField.text = "$" + currentValue;
+		}
 	}
 }
