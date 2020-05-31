@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambale.Keiba.WagerUI
 {
 	public class Ranking : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI[] rankingLabels = new TextMeshProUGUI[3];
-		[SerializeField] private WagerManager wagerManager = null;
+		[SerializeField] private GameObject wagerPanel = null;
+		private WagerManager wagerManager = null;
 
 		private List<Horse> ranking = new List<Horse>();
 		private Color color1 = Color.red;
@@ -17,14 +18,19 @@ namespace AtomosZ.Gambale.Keiba
 		private Color color4 = new Color(.5f, 1, 0, 1);
 
 
+		void Start()
+		{
+			wagerManager = GetComponent<WagerManager>();
+		}
+
+
 		public void RacerFinished(Horse horse)
 		{
-			this.gameObject.SetActive(true);
 			ranking.Add(horse);
 			switch (ranking.Count)
 			{
 				case 1:
-					gameObject.SetActive(true);
+					wagerPanel.SetActive(true);
 					rankingLabels[0].text = horse.name;
 					break;
 				case 2:

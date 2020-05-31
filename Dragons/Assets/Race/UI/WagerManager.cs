@@ -2,17 +2,20 @@
 using AtomosZ.UI;
 using TMPro;
 using UnityEngine;
-using static AtomosZ.Gambale.Keiba.Wagers;
+using static AtomosZ.Gambale.Keiba.WagerUI.Wagers;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambale.Keiba.WagerUI
 {
 	public class WagerManager : MonoBehaviour
 	{
 		[SerializeField] private Wagers wagers = null;
 		[SerializeField] private Spinner spinner = null;
 		[SerializeField] private RacerSelectDisplay rsd = null;
-		[SerializeField] private TextMeshProUGUI payout = null;
+		[SerializeField] private GameObject wagerPanel = null;
+		[SerializeField] private GameObject payoutPanel = null;
+		[SerializeField] private TextMeshProUGUI payoutText = null;
 		[SerializeField] private RaceManager raceManager = null;
+		
 
 		private WagerType wagerType;
 		private List<Horse> picks;
@@ -30,7 +33,7 @@ namespace AtomosZ.Gambale.Keiba
 			picks = rsd.GetSelectedRacers();
 			amountWagered = spinner.currentValue;
 			raceManager.StartRace();
-			this.gameObject.SetActive(false);
+			wagerPanel.SetActive(false);
 		}
 
 		public List<int> Payout(List<Horse> ranking)
@@ -72,8 +75,8 @@ namespace AtomosZ.Gambale.Keiba
 					break;
 			}
 
-			payout.gameObject.SetActive(true);
-			payout.text = "$" + payoutAmount;
+			payoutPanel.SetActive(true);
+			payoutText.text = "$" + payoutAmount;
 			return winners;
 		}
 	}

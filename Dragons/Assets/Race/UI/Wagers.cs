@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambale.Keiba.WagerUI
 {
 	public class Wagers : MonoBehaviour
 	{
@@ -26,20 +26,21 @@ namespace AtomosZ.Gambale.Keiba
 
 		public enum WagerType { Win, Place, Show };
 		private static Color SelectedColor = Color.black;
-		private static Color UnselectedColor = new Color(.75f, .75f, .75f, .75f);
+		private static Color UnselectedColor = new Color(0f, 0f, 0f, .75f);
 
 		[SerializeField] private Slider wagerTypeSlider = null;
 		[SerializeField] private TextMeshProUGUI winLabel = null;
 		[SerializeField] private TextMeshProUGUI placeLabel = null;
 		[SerializeField] private TextMeshProUGUI showLabel = null;
+		[SerializeField]
+		private WagerInfoPanel wagerInfoPanel = null;
 
 		private WagerType type = WagerType.Win;
 
-		public void OnEnable()
+
+		public void Start()
 		{
-			winLabel.color = UnselectedColor;
-			placeLabel.color = UnselectedColor;
-			showLabel.color = UnselectedColor;
+			WagerTypeSliderChanged();
 		}
 
 
@@ -51,17 +52,18 @@ namespace AtomosZ.Gambale.Keiba
 
 			switch (wagerTypeSlider.value)
 			{
-				case 0:
+				case 0: // Pick winner
 					winLabel.color = SelectedColor;
 					break;
-				case 1:
+				case 1: // Pick horse to place 1st or 2nd
 					placeLabel.color = SelectedColor;
 					break;
-				case 2:
+				case 2: // pick horse to place 1st, 2nd or 3rd
 					showLabel.color = SelectedColor;
 					break;
 			}
 			type = (WagerType)wagerTypeSlider.value;
+			wagerInfoPanel.SetWagerInfoText(type);
 		}
 
 		public WagerType GetWagerType()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AtomosZ.Gambale.Keiba.WagerUI;
 using UnityEngine;
 
 namespace AtomosZ.Gambale.Keiba

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambale.Keiba.WagerUI
 {
 	public class RacerSelectDisplay : MonoBehaviour
 	{
 		[SerializeField] private GameObject racerTogglePrefab = null;
 		[SerializeField] private Transform scrollviewContent = null;
 		[SerializeField] private Button placeBetButton = null;
+
 		private List<Horse> selections = new List<Horse>();
 
 

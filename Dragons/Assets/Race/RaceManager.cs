@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace AtomosZ.Gambale.Keiba
@@ -16,6 +17,7 @@ namespace AtomosZ.Gambale.Keiba
 		[SerializeField] private GameObject focusPanel = null;
 		[SerializeField] private GameObject focusButton = null;
 		[SerializeField] private List<GameObject> racerGOs = new List<GameObject>();
+
 
 		private CameraController mainCamera;
 		private List<Horse> racers = new List<Horse>();
@@ -37,8 +39,10 @@ namespace AtomosZ.Gambale.Keiba
 				GameObject newRacer = Instantiate(racer,
 					new Vector3(900 * i, 900 * i, 900 * i), Quaternion.AngleAxis(90, Vector3.up));
 
-				racers.Add(newRacer.GetComponent<Horse>());
-				newRacer.name = "Horse " + i;
+				Horse newHorse = newRacer.GetComponent<Horse>();
+				newHorse.SetNumber(i);
+				racers.Add(newHorse);
+				
 				GameObject newButton = Instantiate(focusButton, focusPanel.transform);
 				newButton.GetComponent<Button>().onClick.AddListener(delegate { FocusOnRider(newRacer); });
 				newButton.GetComponentInChildren<Text>().text = newRacer.name;
@@ -61,15 +65,20 @@ namespace AtomosZ.Gambale.Keiba
 				++i;
 			}
 
-			//mainCamera.SetFocus(racers[0].gameObject);
+			mainCamera.StartRace();
 			StartCoroutine(Countdown());
 			focusPanel.SetActive(true);
 		}
 
 
+		public void LoadNextRace()
+		{
+			SceneManager.LoadScene("RaceScene");
+		}
+
+
 		public void FocusOnRider(GameObject racer)
 		{
-			Debug.Log(racer.name);
 			mainCamera.SetFocusSmooth(racer.transform);
 		}
 
@@ -96,7 +105,7 @@ namespace AtomosZ.Gambale.Keiba
 			startLight.GreenLight();
 			foreach (Horse racer in racers)
 			{
-				//racer.StartRace();
+				racer.StartRace();
 			}
 
 			while (time < 6)

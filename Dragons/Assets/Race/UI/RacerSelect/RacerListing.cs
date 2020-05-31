@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambale.Keiba.WagerUI
 {
 	public class RacerListing : MonoBehaviour
 	{

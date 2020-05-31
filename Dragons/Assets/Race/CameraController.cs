@@ -36,11 +36,18 @@ namespace AtomosZ.Gambale.Keiba
 			trans = transform;
 			rotY = trans.localRotation.eulerAngles.y;
 			rotX = trans.localRotation.eulerAngles.x;
-			StartCoroutine(PanToSmoothly(focus, 10));
+			
 			Cursor.lockState = CursorLockMode.Confined;
 			//trans.position = focus.position;
 			//trans.localEulerAngles = focus.localEulerAngles;
 		}
+
+
+		public void StartRace()
+		{
+			StartCoroutine(PanToSmoothly(focus, 10));
+		}
+
 
 		public void Update()
 		{

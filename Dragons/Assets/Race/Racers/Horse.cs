@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -8,7 +10,7 @@ namespace AtomosZ.Gambale.Keiba
 	{
 		private const float timeToRandomize = 2.5f;
 
-		public int number;
+		
 		public float baseSpeed = 1f;
 		public float speedBoost = 1;
 		public int luck = 0;
@@ -17,12 +19,16 @@ namespace AtomosZ.Gambale.Keiba
 		[SerializeField] private GameObject speedTrailsSmall = null;
 		[SerializeField] private GameObject speedTrailsBig = null;
 		[SerializeField] private GameObject particles = null;
+		[SerializeField] private TextMeshPro numberRightSide = null;
+		[SerializeField] private TextMeshPro numberLeftSide = null;
+
 
 		private EchoEffect echo = null;
 		private Material horseMat = null;
 		private Animator anim;
 		private float timeInRainbow = 0;
 		private float randomizeTime = timeToRandomize;
+		private int number;
 
 		public Waypoint nextWaypoint;
 
@@ -37,6 +43,13 @@ namespace AtomosZ.Gambale.Keiba
 			this.enabled = false;
 			anim.enabled = false;
 			nextWaypoint = RaceManager.FirstWaypoint;
+		}
+
+		public void SetNumber(int i)
+		{
+			name = "Horse " + i;
+			number = i;
+			numberRightSide.text = numberLeftSide.text = i +"";
 		}
 
 		public void StartRace()
@@ -61,7 +74,7 @@ namespace AtomosZ.Gambale.Keiba
 
 			CheckForSpeedEffects(currentSpeed);
 
-			//transform.localPosition += transform.forward * currentSpeed * 20 * Time.deltaTime;
+			transform.localPosition += transform.forward * currentSpeed * 20 * Time.deltaTime;
 			if (Vector3.Distance(nextWaypoint.transform.position, transform.position) < 20)
 			{
 				nextWaypoint = nextWaypoint.next;
