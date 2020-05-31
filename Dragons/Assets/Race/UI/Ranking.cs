@@ -8,7 +8,7 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 	public class Ranking : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI[] rankingLabels = new TextMeshProUGUI[3];
-		[SerializeField] private GameObject wagerPanel = null;
+		[SerializeField] private GameObject rankingPanel = null;
 		private WagerManager wagerManager = null;
 
 		private List<Horse> ranking = new List<Horse>();
@@ -30,7 +30,7 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 			switch (ranking.Count)
 			{
 				case 1:
-					wagerPanel.SetActive(true);
+					rankingPanel.SetActive(true);
 					rankingLabels[0].text = horse.name;
 					break;
 				case 2:
@@ -40,7 +40,7 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 					rankingLabels[2].text = horse.name;
 					foreach (int winner in wagerManager.Payout(ranking))
 					{
-						StartCoroutine(ColorPizzazz(rankingLabels[winner - 1]));
+						StartCoroutine(ColorPizzazz(rankingLabels[winner]));
 					}
 					break;
 			}

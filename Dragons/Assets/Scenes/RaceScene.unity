@@ -5039,7 +5039,7 @@ MonoBehaviour:
   - {fileID: 52496782}
   - {fileID: 1770226474}
   - {fileID: 1016065846}
-  wagerPanel: {fileID: 1549025864}
+  rankingPanel: {fileID: 703226884}
 --- !u!114 &1504702266
 MonoBehaviour:
   m_ObjectHideFlags: 0

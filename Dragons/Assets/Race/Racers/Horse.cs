@@ -1,5 +1,4 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -10,7 +9,7 @@ namespace AtomosZ.Gambale.Keiba
 	{
 		private const float timeToRandomize = 2.5f;
 
-		
+
 		public float baseSpeed = 1f;
 		public float speedBoost = 1;
 		public int luck = 0;
@@ -49,7 +48,7 @@ namespace AtomosZ.Gambale.Keiba
 		{
 			name = "Horse " + i;
 			number = i;
-			numberRightSide.text = numberLeftSide.text = i +"";
+			numberRightSide.text = numberLeftSide.text = i + "";
 		}
 
 		public void StartRace()
@@ -204,6 +203,10 @@ namespace AtomosZ.Gambale.Keiba
 					break;
 				case 22:
 					EngageSpeedBoost(4);
+					baseSpeed += .5f;
+					break;
+				default:
+					EngageSpeedBoost(5);
 					baseSpeed += .5f;
 					break;
 			}

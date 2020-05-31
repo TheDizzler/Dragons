@@ -36,8 +36,8 @@ namespace AtomosZ.Gambale.Keiba
 				}
 
 				echos[nextEcho].sprite = spriteRenderer.sprite;
-				echos[nextEcho].transform.localPosition = transform.localPosition;
-				echos[nextEcho].transform.localRotation = transform.localRotation;
+				echos[nextEcho].transform.position = transform.position;
+				echos[nextEcho].transform.rotation = transform.rotation;
 				timeBetweenSpawns = startTimeBetweenSpawns;
 			}
 			else
