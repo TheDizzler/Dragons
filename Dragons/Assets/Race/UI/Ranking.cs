@@ -12,10 +12,13 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 		private WagerManager wagerManager = null;
 
 		private List<Horse> ranking = new List<Horse>();
-		private Color color1 = Color.red;
-		private Color color2 = new Color(.5f, 0, 1, 1);
-		private Color color3 = Color.cyan;
-		private Color color4 = new Color(.5f, 1, 0, 1);
+		public List<Color> pizzazz = new List<Color>()
+		{
+			Color.red,
+			new Color(.5f, 0, 1, 1),
+			Color.cyan,
+			new Color(.5f, 1, 0, 1),
+		};
 
 
 		void Start()
@@ -46,17 +49,43 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 			}
 		}
 
+		public void TestPizzazz()
+		{
+			for (int i = 0; i < rankingLabels.Length; ++i)
+			{
+				StartCoroutine(ColorPizzazz(rankingLabels[i]));
+			}
+		}
 
+		
 		private IEnumerator ColorPizzazz(TextMeshProUGUI placingText)
 		{
-			VertexGradient magicalColors = new VertexGradient(color1, color2, color3, color4);
+			VertexGradient magicalColors = new VertexGradient(pizzazz[0], pizzazz[1], pizzazz[2], pizzazz[3]);
 			placingText.enableVertexGradient = true;
 			placingText.colorGradient = magicalColors;
+			Color color1 = pizzazz[0];
+			Color color2 = pizzazz[1];
+			Color color3 = pizzazz[2];
+			Color color4 = pizzazz[3];
+			int cycleStartIndex = 1;
 
+			float t = 0;
 			while (true)
 			{
 				yield return null;
-				float t = Time.deltaTime;
+				t += Time.deltaTime;
+				if (t > 1)
+				{
+					t = 0;
+					int nextColorIndex = cycleStartIndex;
+					SetNextColor(ref color1, ref nextColorIndex);
+					SetNextColor(ref color2, ref nextColorIndex);
+					SetNextColor(ref color3, ref nextColorIndex);
+					SetNextColor(ref color4, ref nextColorIndex);
+					if (++cycleStartIndex >= pizzazz.Count)
+						cycleStartIndex = 0;
+				}
+
 				Color c1 = Color.Lerp(color1, color2, t);
 				Color c2 = Color.Lerp(color2, color3, t);
 				Color c3 = Color.Lerp(color3, color4, t);
@@ -65,13 +94,15 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 				magicalColors.topRight = c2;
 				magicalColors.bottomRight = c3;
 				magicalColors.bottomLeft = c4;
-				color1 = c1;
-				color2 = c2;
-				color3 = c3;
-				color4 = c4;
 				placingText.colorGradient = magicalColors;
-
 			}
+		}
+
+		private void SetNextColor(ref Color color, ref int nextColorIndex)
+		{
+			if (nextColorIndex >= pizzazz.Count)
+				nextColorIndex = 0;
+			color = pizzazz[nextColorIndex++];
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 		[SerializeField] private GameObject payoutPanel = null;
 		[SerializeField] private TextMeshProUGUI payoutText = null;
 		[SerializeField] private RaceManager raceManager = null;
-		
+
 
 		private WagerType wagerType;
 		private List<Horse> picks;
@@ -36,11 +36,12 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 			wagerPanel.SetActive(false);
 		}
 
+
 		public List<int> Payout(List<Horse> ranking)
 		{
 			List<int> winners = new List<int>();
 			int payoutAmount = 0;
-			
+
 			switch (wagerType)
 			{
 				case WagerType.Win:
