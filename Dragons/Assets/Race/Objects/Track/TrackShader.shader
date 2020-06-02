@@ -28,6 +28,12 @@
 				v2f o;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.uv = v.texcoord;
+
+				float sinX = sin(1.5708);
+				float cosX = cos(1.5708);
+				float sinY = sin(1.5708);
+				float2x2 rotationMatrix = float2x2(cosX, -sinX, sinY, cosX);
+				o.uv.xy = mul(v.texcoord.xy, rotationMatrix);
 				return o;
 			}
 

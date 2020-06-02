@@ -39,6 +39,9 @@ namespace AtomosZ.Gambale.Keiba.WagerUI
 
 		public List<int> Payout(List<Horse> ranking)
 		{
+			if (picks == null)
+				return new List<int>(); // probably means we're just running a test
+
 			List<int> winners = new List<int>();
 			int payoutAmount = 0;
 

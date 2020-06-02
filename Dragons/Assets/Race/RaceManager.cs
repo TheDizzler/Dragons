@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PathCreation;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,8 +9,10 @@ namespace AtomosZ.Gambale.Keiba
 {
 	public class RaceManager : MonoBehaviour
 	{
-		public static Waypoint FirstWaypoint = null;
-
+		public static Waypoint firstWaypoint = null;
+		public bool closedLoopCourse = true;
+		public bool useGlobalAngle = true;
+		public float globalAngle = 0;
 
 		[SerializeField] private TrafficLights startLight = null;
 		[SerializeField] private StartLine startLine = null;
@@ -27,12 +30,32 @@ namespace AtomosZ.Gambale.Keiba
 		public void OnEnable()
 		{
 			mainCamera = Camera.main.GetComponent<CameraController>();
+
+			if (firstWaypoint == null)
+				firstWaypoint = GameObject.Find("First Waypoint").GetComponent<Waypoint>();
+			Waypoint waypoint = firstWaypoint;
+			List<Transform> waypoints = new List<Transform>();
+			while (waypoint != null)
+			{
+				waypoints.Add(waypoint.transform);
+				waypoint = waypoint.next;
+
+			}
+
+			if (waypoints.Count != 0)
+			{
+				BezierPath bezierPath = new BezierPath(waypoints, closedLoopCourse, PathSpace.xyz);
+				GetComponent<PathCreator>().bezierPath = bezierPath;
+			}
+
+			if (useGlobalAngle)
+				GetComponent<PathCreator>().bezierPath.GlobalNormalsAngle = globalAngle;
 		}
 
 
 		public List<Horse> GetRacers()
 		{
-			FirstWaypoint = GameObject.Find("First Waypoint").GetComponent<Waypoint>();
+
 			int i = 0;
 			foreach (GameObject racer in racerGOs)
 			{
@@ -42,7 +65,7 @@ namespace AtomosZ.Gambale.Keiba
 				Horse newHorse = newRacer.GetComponent<Horse>();
 				newHorse.SetNumber(i);
 				racers.Add(newHorse);
-				
+
 				GameObject newButton = Instantiate(focusButton, focusPanel.transform);
 				newButton.GetComponent<Button>().onClick.AddListener(delegate { FocusOnRider(newRacer); });
 				newButton.GetComponentInChildren<Text>().text = newRacer.name;
@@ -116,5 +139,30 @@ namespace AtomosZ.Gambale.Keiba
 
 			startLine.started = true;
 		}
+
+		public void ManualUpdateRoadMesh()
+		{
+			if (firstWaypoint == null)
+				firstWaypoint = GameObject.Find("First Waypoint").GetComponent<Waypoint>();
+			Waypoint waypoint = firstWaypoint;
+			List<Transform> waypoints = new List<Transform>();
+			while (waypoint != null)
+			{
+				waypoints.Add(waypoint.transform);
+				waypoint = waypoint.next;
+
+			}
+
+			if (waypoints.Count != 0)
+			{
+				BezierPath bezierPath = new BezierPath(waypoints, closedLoopCourse, PathSpace.xyz);
+				GetComponent<PathCreator>().bezierPath = bezierPath;
+			}
+
+			if (useGlobalAngle)
+				GetComponent<PathCreator>().bezierPath.GlobalNormalsAngle = globalAngle;
+		}
+
+
 	}
 }
