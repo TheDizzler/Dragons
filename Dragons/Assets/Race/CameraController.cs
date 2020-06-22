@@ -60,12 +60,12 @@ namespace AtomosZ.Gambale.Keiba
 		{
 			if (follow)
 			{
-				if (rotateAroundFocus)
+				//if (rotateAroundFocus)
 				{
 					Vector3 dir = prevPos - cam.ScreenToViewportPoint(Input.mousePosition);
 					trans.position = focus.localPosition;
-					trans.Rotate(Vector3.right, dir.y * 180);
-					trans.Rotate(Vector3.up, -dir.x * 180, Space.World);
+					//trans.Rotate(Vector3.right, dir.y * 180);
+					//trans.Rotate(Vector3.up, -dir.x * 180, Space.World);
 					trans.Translate(new Vector3(0, 0, -10));
 
 					prevPos = cam.ScreenToViewportPoint(Input.mousePosition);

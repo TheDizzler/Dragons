@@ -1,10 +1,10 @@
-﻿using AtomosZ.Gambale.Keiba.WagerUI;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace AtomosZ.Gambale.Keiba
 {
 	public class SceneInitializer : MonoBehaviour
 	{
+		public RaceManager raceManager;
 		public GameObject focusPanel;
 		public GameObject rankingPanel;
 		public GameObject payoutPanel;
@@ -13,15 +13,18 @@ namespace AtomosZ.Gambale.Keiba
 
 		void Start()
 		{
-			if (focusPanel.activeInHierarchy)
-				focusPanel.SetActive(false);
-			if (rankingPanel.activeInHierarchy)
-				rankingPanel.SetActive(false);
-			if (payoutPanel.activeInHierarchy)
-				payoutPanel.SetActive(false);
+			focusPanel.SetActive(false);
+			rankingPanel.SetActive(false);
+			payoutPanel.SetActive(false);
+			wagerPanel.SetActive(false);
 
-			if (!wagerPanel.activeInHierarchy)
-				wagerPanel.SetActive(true);
+
+		}
+
+		void Update()
+		{
+			raceManager.StartRace();
+			this.enabled = false;
 		}
 	}
 }
