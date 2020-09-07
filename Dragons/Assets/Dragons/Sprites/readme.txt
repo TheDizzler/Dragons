@@ -1,0 +1,1 @@
+8bitDeckAssets taken from (free) https://drawsgood.itch.io/8bit-deck-card-assets?download
