@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AtomosZ.Dragons
+namespace AtomosZ.Gambale.Poker
 {
 	public class Player : MonoBehaviour
 	{
@@ -17,63 +17,18 @@ namespace AtomosZ.Dragons
 		public void AddCardToHand(Card newcard)
 		{
 			hand.Add(newcard);
-			handPanel.DisplayNewCard(newcard, this);
+			handPanel.AddCardToHand(newcard, this);
 		}
 
-		private void CheckScore()
+		private void CheckBestHand()
 		{
-			Dictionary<Suit, int> scores = new Dictionary<Suit, int>();
-			int dragonCount = 1;
-
-			foreach (Card card in hand)
-			{
-				if (scores.TryGetValue(card.suit, out int value))
-				{
-					scores[card.suit] = value + card.value;
-				}
-				else
-				{
-					if (card.suit == Suit.Dragon)
-					{
-						++dragonCount;
-					}
-					else
-						scores.Add(card.suit, card.value);
-				}
-			}
-
-			string valueCheck = "";
-			int best = 0;
-			foreach (KeyValuePair<Suit, int> kvp in scores)
-			{
-				valueCheck += kvp.Key + " = " + (kvp.Value * dragonCount) + ";";
-				if ((kvp.Value * dragonCount) > best)
-				{
-					best = kvp.Value * dragonCount;
-				}
-			}
-
-			if (dragonCount == 6)
-			{
-				valueCheck = "Dragon Strike! 50 points!";
-				best = 50;
-			}
-
-			handPanel.SetScore(best);
-
-			Debug.Log(valueCheck);
+			
 		}
 
 		public void EndTurn()
 		{
 			handPanel.SetActiveTurn(false);
-			CheckScore();
-			//if (hand.Count > Rules.MaxCardsInHand)
-			//{
-			//	return false;
-			//}
-
-			//return true;
+			CheckBestHand();
 		}
 
 		public void RemoveCards(List<CardInHand> cardsSelected)
@@ -93,7 +48,7 @@ namespace AtomosZ.Dragons
 		public void StartTurn()
 		{
 			handPanel.SetActiveTurn(true);
-			CheckScore();
+			CheckBestHand();
 		}
 	}
 }

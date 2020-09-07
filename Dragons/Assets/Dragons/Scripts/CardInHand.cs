@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-namespace AtomosZ.Dragons
+namespace AtomosZ.Gambale.Poker
 {
 	public class CardInHand : MonoBehaviour, IPointerClickHandler
 	{
@@ -14,8 +14,8 @@ namespace AtomosZ.Dragons
 
 		private Dealer dealer;
 		private Player owner;
-		private Card card;
-		private float selectSlideSpeed = 50f;
+		[SerializeField] private Card card = null;
+		private float selectSlideSpeed = 100f;
 		private float startPosY;
 		private float selectPosY;
 
@@ -25,7 +25,6 @@ namespace AtomosZ.Dragons
 
 		public void Start()
 		{
-			GetComponentInChildren<Text>().text = card.suit + "\n\n" + card.value;
 			dealer = GameObject.FindGameObjectWithTag("Dealer").GetComponent<Dealer>();
 		}
 
@@ -38,6 +37,15 @@ namespace AtomosZ.Dragons
 		{
 			card = crd;
 			owner = player;
+			GetComponent<Image>().sprite = card.sprite;
+
+			startPosY = transform.position.y;
+			selectPosY = startPosY + selectPosYOffset;
+		}
+
+		public void NullifyCard()
+		{
+			card = Deck.nullCard;
 		}
 
 		void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
@@ -100,7 +108,7 @@ namespace AtomosZ.Dragons
 
 			while (trans.position.y < selectPosY)
 			{
-				newpos.y += selectSlideSpeed * Time.deltaTime;
+				newpos.y += selectSlideSpeed * Time.deltaTime * 2;
 				trans.position = newpos;
 				yield return null;
 			}

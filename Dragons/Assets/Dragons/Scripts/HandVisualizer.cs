@@ -1,34 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Dragons
+namespace AtomosZ.Gambale.Poker
 {
 	public class HandVisualizer : MonoBehaviour
 	{
 		private static Color turnColor = new Color(255, 0, 255, 100);
 		private static Color waitColor = new Color(255, 255, 255, 100);
 
-		[SerializeField] private GameObject cardPrefab = null;
 		[SerializeField] private GameObject[] cardPlaceholders = null;
 		[SerializeField] private Text score = null;
 
 		private List<CardInHand> heldCards = new List<CardInHand> { null, null, null, null, null };
 
 
-		public void DisplayNewCard(Card crd, Player player)
+		public void Start()
 		{
-			GameObject newcardGO = Instantiate(cardPrefab, this.transform);
-			CardInHand card = newcardGO.GetComponent<CardInHand>();
-			card.SetCard(crd, player);
+			cardPlaceholders = new GameObject[5];
+			for (int i = 0; i < transform.GetChild(0).childCount; ++i)
+			{
+				cardPlaceholders[i] = transform.GetChild(0).GetChild(i).gameObject;
+			}
+		}
 
+		public void AddCardToHand(Card crd, Player player)
+		{
 			for (int i = 0; i < heldCards.Count; ++i)
 			{
 				if (heldCards[i] == null)
 				{
+					CardInHand card = cardPlaceholders[i].GetComponent<CardInHand>();
+					card.SetCard(crd, player);
 					heldCards[i] = card;
-					card.SetPosition(cardPlaceholders[i].transform.position);
 					break;
 				}
 			}
@@ -44,7 +48,7 @@ namespace AtomosZ.Dragons
 
 			int i = heldCards.IndexOf(inHand);
 			heldCards[i] = null;
-			Destroy(inHand.gameObject);
+			inHand.NullifyCard();
 		}
 
 		public void SetScore(int best)

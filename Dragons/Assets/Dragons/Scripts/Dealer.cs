@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AtomosZ.Dragons
+namespace AtomosZ.Gambale.Poker
 {
 	/// <summary>
 	/// Actually a manager class with a clever name.
@@ -26,7 +26,9 @@ namespace AtomosZ.Dragons
 				players.Add(playerGO.GetComponent<Player>());
 			}
 
-			deck.Shuffle();
+			deck.CreateDeck(PokerRules.useJokers);
+			for (int i = 0; i < Random.Range(2, 6); ++i)
+				deck.Shuffle();
 
 			StartCoroutine(Deal());
 		}
@@ -53,7 +55,7 @@ namespace AtomosZ.Dragons
 		/// <returns>false when too many cards selected</returns>
 		public bool SetCardSelected(CardInHand cardInHand)
 		{
-			if (cardsSelected.Count >= Rules.MaxCardReplaceAmount)
+			if (cardsSelected.Count >= PokerRules.MaxCardReplaceAmount)
 			{
 				return false;
 			}
@@ -98,10 +100,10 @@ namespace AtomosZ.Dragons
 			{
 				// end game
 				Debug.Log("No more cards; End game.");
-				
+
 				return;
 			}
-			
+
 			players[currentPlayerIndex++].EndTurn();
 			if (currentPlayerIndex >= players.Count)
 				currentPlayerIndex = 0;
@@ -113,7 +115,7 @@ namespace AtomosZ.Dragons
 		/// </summary>
 		private IEnumerator Deal()
 		{
-			for (int i = 0; i < Rules.MaxCardsInHand; ++i)
+			for (int i = 0; i < PokerRules.MaxCardsInHand; ++i)
 			{
 				foreach (Player player in players)
 				{
