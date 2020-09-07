@@ -6,8 +6,8 @@ namespace AtomosZ.Gambale.Keiba
 	public class CameraController : MonoBehaviour
 	{
 		[SerializeField] private Transform focus;
-		[SerializeField] private float inputSensitivity = 50.0f;
-		[SerializeField] private float clampAngle = 90;
+		//[SerializeField] private float inputSensitivity = 50.0f;
+		//[SerializeField] private float clampAngle = 90;
 		//[SerializeField]
 		//[Range(0.01f, 1.0f)]
 		//private float smoothFactor = .5f;
