@@ -8,6 +8,7 @@ TagManager:
   - Planet
   - Racer
   - Waypoint
+  - Track
   layers:
   - Default
   - TransparentFX

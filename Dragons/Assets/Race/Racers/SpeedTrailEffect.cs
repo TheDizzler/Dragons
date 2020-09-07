@@ -35,6 +35,8 @@ namespace AtomosZ.Gambale.Keiba
 			if (t < 0)
 				up = true;
 			transform.localPosition = Vector3.Lerp(bottomPos, topPos, t);
+			//Quaternion rot = Quaternion.AngleAxis(180, Vector3.right);
+			//transform.localRotation = Quaternion.SlerpUnclamped(transform.localRotation, rot, totalTime);
 		}
 	}
 }

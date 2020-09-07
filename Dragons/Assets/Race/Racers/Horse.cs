@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using PathCreation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -9,12 +10,14 @@ namespace AtomosZ.Gambale.Keiba
 	{
 		private const float timeToRandomize = 2.5f;
 
-
+		public float rotateSpeed = .1f;
 		public float baseSpeed = 1f;
 		public float speedBoost = 1;
 		public int luck = 0;
 		public Image portrait;
 
+		[SerializeField] private PathCreator pathCreator = null;
+		[SerializeField] private EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop;
 		[SerializeField] private GameObject speedTrailsSmall = null;
 		[SerializeField] private GameObject speedTrailsBig = null;
 		[SerializeField] private GameObject particles = null;
@@ -28,6 +31,7 @@ namespace AtomosZ.Gambale.Keiba
 		private float timeInRainbow = 0;
 		private float randomizeTime = timeToRandomize;
 		private int number;
+		private float distanceTravelled;
 
 		public Waypoint nextWaypoint;
 
@@ -41,7 +45,19 @@ namespace AtomosZ.Gambale.Keiba
 			gameObject.SetActive(false);
 			this.enabled = false;
 			anim.enabled = false;
-			nextWaypoint = RaceManager.FirstWaypoint;
+
+			pathCreator = GameObject.FindGameObjectWithTag("Track").GetComponent<PathCreator>();
+			if (pathCreator != null)
+			{
+				// Subscribed to the pathUpdated event so that we're notified if the path changes during the game
+				pathCreator.pathUpdated += OnPathChanged;
+			}
+			else
+				Debug.LogError("Can't find path creator!");
+
+			GetComponent<BoxCollider>().enabled = true;
+
+			nextWaypoint = RaceManager.firstWaypoint;
 		}
 
 		public void SetNumber(int i)
@@ -80,7 +96,8 @@ namespace AtomosZ.Gambale.Keiba
 				if (nextWaypoint == null)
 				{
 					// finished!
-					enabled = false;
+					//enabled = false;
+					nextWaypoint = RaceManager.firstWaypoint;
 					return;
 				}
 			}
@@ -88,8 +105,14 @@ namespace AtomosZ.Gambale.Keiba
 			Vector3 dirToWaypoint = nextWaypoint.transform.position - transform.position;
 			Vector3 moveTowards = nextWaypoint.transform.position;
 			moveTowards.y = transform.position.y;
-			transform.LookAt(moveTowards);
-			Debug.DrawRay(transform.position, dirToWaypoint);
+			Quaternion lookRot = Quaternion.LookRotation(dirToWaypoint.normalized);
+			transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, rotateSpeed * Time.deltaTime);
+
+			//float distTravelledThisUpdate = currentSpeed * 20 * Time.deltaTime;
+			//distanceTravelled += distTravelledThisUpdate;
+			//Vector3 destination = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
+			//transform.position = Vector3.MoveTowards(transform.position, destination, distTravelledThisUpdate);
+			//transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
 		}
 
 		private void CheckForSpeedEffects(float currentSpeed)
@@ -224,6 +247,14 @@ namespace AtomosZ.Gambale.Keiba
 			speedBoost = 1;
 			speedTrailsSmall.SetActive(false);
 			speedTrailsBig.SetActive(false);
+		}
+
+
+		// If the path changes during the game, update the distance travelled so that the follower's position on the new path
+		// is as close as possible to its position on the old path
+		void OnPathChanged()
+		{
+			distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
 		}
 	}
 }
