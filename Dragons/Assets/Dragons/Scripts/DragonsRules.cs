@@ -2,7 +2,7 @@
 
 namespace AtomosZ.Dragons
 {
-	public class Rules : MonoBehaviour
+	public class DragonsRules
 	{
 		public const int MaxCardsInHand = 5;
 		public const int MaxCardReplaceAmount = 4;

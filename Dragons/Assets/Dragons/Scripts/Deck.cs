@@ -1,43 +1,20 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 using Random = UnityEngine.Random;
 
-namespace AtomosZ.Dragons
+namespace AtomosZ.Gambale.Poker
 {
 	public class Deck : MonoBehaviour
 	{
-		private List<Card> deck = new List<Card>();
-		//{
-		//	new Card(Suit.A, 1), new Card(Suit.A, 2),new Card(Suit.A, 3), new Card(Suit.A, 4),new Card(Suit.A, 5),
-		//	new Card(Suit.B, 1), new Card(Suit.B, 2),new Card(Suit.B, 3), new Card(Suit.B, 4),new Card(Suit.B, 5),
-		//	new Card(Suit.C, 1), new Card(Suit.C, 2),new Card(Suit.C, 3), new Card(Suit.C, 4),new Card(Suit.C, 5),
-		//	new Card(Suit.D, 1), new Card(Suit.D, 2),new Card(Suit.D, 3), new Card(Suit.D, 4),new Card(Suit.D, 5),
-		//	new Card(Suit.E, 1), new Card(Suit.E, 2),new Card(Suit.E, 3), new Card(Suit.E, 4),new Card(Suit.E, 5),
-		//	new Card(Suit.F, 1), new Card(Suit.F, 2),new Card(Suit.F, 3), new Card(Suit.F, 4),new Card(Suit.F, 5),
-		//	new Card(Suit.G, 1), new Card(Suit.G, 2),new Card(Suit.G, 3), new Card(Suit.G, 4),new Card(Suit.G, 5),
-		//	new Card(Suit.Dragon, 1), new Card(Suit.Dragon, 2),new Card(Suit.Dragon, 3), new Card(Suit.Dragon, 4),new Card(Suit.Dragon, 5),
-		//};
+		public static Card nullCard;
 
+		protected List<Card> deck = new List<Card>();
+		[SerializeField] private SpriteAtlas deckAtlas = null;
 
-		public void Start()
-		{
-			CreateDeck();
-		}
-
-		public void CreateDeck()
-		{
-			foreach (Suit suit in (Suit[])System.Enum.GetValues(typeof(Suit)))
-			{
-				for (int i = 1; i <= 5; ++i)
-					deck.Add(new Card(suit, i));
-			}
-
-		}
 
 		public void Shuffle()
 		{
-			Debug.Log("Shuffle - " + deck.Count + " cards in deck");
-
 			for (int i = 0; i < deck.Count; i += 2)
 			{
 				Card moving = deck[i];
@@ -55,6 +32,49 @@ namespace AtomosZ.Dragons
 			}
 		}
 
+		public void CreateDeck(bool useJokers)
+		{
+			nullCard = new Card(Suit.Blank, -1, deckAtlas.GetSprite("CardPlaceholder"));
+			foreach (Suit suit in (Suit[])System.Enum.GetValues(typeof(Suit)))
+			{
+				if (suit == Suit.Blank)
+					continue;
+				if (suit == Suit.Joker && useJokers)
+				{
+						deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_0")));
+						deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_1")));
+				}
+				else
+				{
+					for (int i = 1; i <= 13; ++i)
+					{
+						string value = "_";
+						switch (i)
+						{
+							case 1:
+								value += "A";
+								break;
+							case 11:
+								value += "J";
+								break;
+							case 12:
+								value += "Q";
+								break;
+							case 13:
+								value += "K";
+								break;
+							default:
+								value += i;
+								break;
+						}
+
+						deck.Add(new Card(suit, i, deckAtlas.GetSprite(suit + value)));
+					}
+				}
+			}
+		}
+
+
 		public Card DrawCard()
 		{
 			Card topCard = deck[0];
@@ -68,20 +88,26 @@ namespace AtomosZ.Dragons
 		}
 	}
 
+
 	public enum Suit
 	{
-		A, B, C, D, E, F, G, Dragon
-	};
+		Blank,
+		Hearts, Clubs, Diamonds, Spades, Joker
+	}
 
+
+	[System.Serializable]
 	public class Card
 	{
 		public Suit suit;
 		public int value;
+		public Sprite sprite;
 
-		public Card(Suit s, int val)
+		public Card(Suit s, int val, Sprite sprt)
 		{
 			suit = s;
 			value = val;
+			sprite = sprt;
 		}
 	};
 }
