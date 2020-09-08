@@ -2,9 +2,9 @@
 using AtomosZ.UI;
 using TMPro;
 using UnityEngine;
-using static AtomosZ.Gambale.Keiba.WagerUI.Wagers;
+using static AtomosZ.Gambal.Keiba.WagerUI.Wagers;
 
-namespace AtomosZ.Gambale.Keiba.WagerUI
+namespace AtomosZ.Gambal.Keiba.WagerUI
 {
 	public class WagerManager : MonoBehaviour
 	{

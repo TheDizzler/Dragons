@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class CameraController : MonoBehaviour
 	{

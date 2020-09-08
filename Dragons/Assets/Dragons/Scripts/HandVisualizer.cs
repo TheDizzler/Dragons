@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Poker
+namespace AtomosZ.Gambal.Poker
 {
 	public class HandVisualizer : MonoBehaviour
 	{

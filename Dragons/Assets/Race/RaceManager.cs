@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class RaceManager : MonoBehaviour
 	{

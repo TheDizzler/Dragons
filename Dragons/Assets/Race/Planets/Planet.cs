@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class Planet : MonoBehaviour
 	{

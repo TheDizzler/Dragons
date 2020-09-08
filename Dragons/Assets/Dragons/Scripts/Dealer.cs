@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-namespace AtomosZ.Gambale.Poker
+namespace AtomosZ.Gambal.Poker
 {
 	/// <summary>
 	/// Actually a manager class with a clever name.

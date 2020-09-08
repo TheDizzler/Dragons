@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba.CustomEditors
+namespace AtomosZ.Gambal.Keiba.CustomEditors
 {
 	[CustomEditor(typeof(Waypoint))]
 	public class WaypointCreator : Editor

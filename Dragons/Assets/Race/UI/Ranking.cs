@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba.WagerUI
+namespace AtomosZ.Gambal.Keiba.WagerUI
 {
 	public class Ranking : MonoBehaviour
 	{

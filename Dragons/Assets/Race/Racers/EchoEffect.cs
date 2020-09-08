@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class EchoEffect : MonoBehaviour
 	{

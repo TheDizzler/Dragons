@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 using Random = UnityEngine.Random;
 
-namespace AtomosZ.Gambale.Poker
+namespace AtomosZ.Gambal.Poker
 {
 	public class Deck : MonoBehaviour
 	{

@@ -1,11 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public static class PokerRules
+namespace AtomosZ.Gambal.Poker
 {
-	public const int MaxCardsInHand = 5;
-	public const int MaxCardReplaceAmount = 3;
+	public class PokerRules : MonoBehaviour
+	{
+		public int MaxCardsInHand = 5;
+		public int MaxCardDrawAmount = 3;
+		public int MaxDrawsAllowed = 3;
 
-	public static bool useJokers = true;
+		public int ante = 1;
+
+		public bool useJokers = false;
+
+		public enum TurnPhase
+		{
+			Dealer,
+			Bet,
+			Draw
+		}
+
+		public enum Scoring
+		{
+			NoPair,
+			OnePair,
+			TwoPair,
+			ThreeOfAKind,
+			Straight,
+			Flush,
+			FullHouse,
+			FourOfAKind,
+			StraighFlush,
+			/// <summary>
+			/// Wild Card games only.
+			/// </summary>
+			FiveOfAKind,
+		}
+	}
 }

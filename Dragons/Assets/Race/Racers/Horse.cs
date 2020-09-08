@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class Horse : MonoBehaviour
 	{

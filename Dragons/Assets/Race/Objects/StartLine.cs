@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using AtomosZ.Gambale.Keiba.WagerUI;
+using AtomosZ.Gambal.Keiba.WagerUI;
 using UnityEngine;
 
-namespace AtomosZ.Gambale.Keiba
+namespace AtomosZ.Gambal.Keiba
 {
 	public class StartLine : MonoBehaviour
 	{

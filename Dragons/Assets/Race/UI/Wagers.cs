@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace AtomosZ.Gambale.Keiba.WagerUI
+namespace AtomosZ.Gambal.Keiba.WagerUI
 {
 	public class Wagers : MonoBehaviour
 	{

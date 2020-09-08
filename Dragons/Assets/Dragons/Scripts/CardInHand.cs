@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Color = UnityEngine.Color;
 
-namespace AtomosZ.Gambale.Poker
+namespace AtomosZ.Gambal.Poker
 {
 	public class CardInHand : MonoBehaviour, IPointerClickHandler
 	{
