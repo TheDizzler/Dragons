@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,19 +12,33 @@ namespace AtomosZ.Gambal.Poker
 		private static Color turnColor = new Color(255, 0, 255, 100);
 		private static Color waitColor = new Color(255, 255, 255, 100);
 
+
+
 		[SerializeField] private GameObject[] cardPlaceholders = null;
 		[SerializeField] private Text score = null;
+		[SerializeField] private GameObject fundsChangedTextPrefab = null;
 
 		private List<CardInHand> heldCards = new List<CardInHand> { null, null, null, null, null };
+		private Player owner;
 
 
-		public void Start()
+		void Start()
 		{
 			cardPlaceholders = new GameObject[5];
 			for (int i = 0; i < transform.GetChild(0).childCount; ++i)
 			{
 				cardPlaceholders[i] = transform.GetChild(0).GetChild(i).gameObject;
 			}
+		}
+
+		public void SetOwner(Player player)
+		{
+			owner = player;
+		}
+
+		public void SetFundsText(int funds)
+		{
+			score.text = "$" + funds;
 		}
 
 		public void AddCardToHand(Card crd, Player player)
@@ -51,9 +68,14 @@ namespace AtomosZ.Gambal.Poker
 			inHand.NullifyCard();
 		}
 
-		public void SetScore(int best)
+		public void MoneyChanged(int amount)
 		{
-			score.text = best.ToString();
+			StartCoroutine(MoneyDrain(amount));
+		}
+
+		private void SetScore(int newScore)
+		{
+			score.text = newScore.ToString();
 		}
 
 		public void SetActiveTurn(bool isTurn)
@@ -62,6 +84,23 @@ namespace AtomosZ.Gambal.Poker
 				GetComponent<Image>().color = turnColor;
 			else
 				GetComponent<Image>().color = waitColor;
+		}
+
+
+		private IEnumerator MoneyDrain(int amountDrained)
+		{
+			float timeToDrain = 1;
+			GameObject label = Instantiate(fundsChangedTextPrefab, transform);
+			label.GetComponent<TextMeshProUGUI>().text = "$" + amountDrained;
+			while (timeToDrain > 0)
+			{
+				yield return null;
+				timeToDrain -= Time.deltaTime;
+				label.transform.position += new Vector3(0, 10 * Time.deltaTime, 0);
+			}
+
+			Destroy(label);
+			score.text = "$" + owner.funds;
 		}
 	}
 }

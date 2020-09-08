@@ -13,11 +13,14 @@ namespace AtomosZ.Gambal.Poker
 		public int totalBets = 0;
 		public int totalRaise = 0;
 
+		[SerializeField] private PokerRules pokerRules = null;
 		[SerializeField] private Deck deck = null;
+		[SerializeField] private Pot pot = null;
 		[SerializeField] private List<Player> players = null;
 
-		private int currentPlayerIndex;
+		private int currentPlayerIndex = -1;
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
+		private PokerRules.TurnPhase phase = PokerRules.TurnPhase.Dealer;
 
 
 		public void Start()
@@ -27,13 +30,57 @@ namespace AtomosZ.Gambal.Poker
 				players.Add(playerGO.GetComponent<Player>());
 			}
 
-			deck.CreateDeck(PokerRules.useJokers);
+			deck.CreateDeck(pokerRules.useJokers);
 			for (int i = 0; i < Random.Range(2, 6); ++i)
 				deck.Shuffle();
 
-			StartCoroutine(Deal());
+			StartCoroutine(StartGame());
 		}
 
+		private IEnumerator StartGame()
+		{
+			yield return StartCoroutine(Deal());
+			yield return StartCoroutine(CollectAnte());
+
+			phase = PokerRules.TurnPhase.Bet;
+			currentPlayerIndex = 0;
+			players[currentPlayerIndex].StartTurn();
+		}
+
+		/// <summary>
+		/// Deal a full hand to all players.
+		/// </summary>
+		private IEnumerator Deal()
+		{
+			for (int i = 0; i < pokerRules.MaxCardsInHand; ++i)
+			{
+				foreach (Player player in players)
+				{
+					player.AddCardToHand(deck.DrawCard());
+					yield return new WaitForSeconds(.3f);
+				}
+			}
+		}
+
+		private IEnumerator CollectAnte()
+		{
+			foreach (var player in players)
+			{
+				yield return new WaitForSeconds(.5f);
+				pot.AddToPot(player.SubtractFunds(pokerRules.ante));
+			}
+		}
+
+
+		//void Update()
+		//{
+		//	switch (phase)
+		//	{
+		//		case PokerRules.TurnPhase.Bet:
+
+		//			break;
+		//	}
+		//}
 
 		public void ReplaceCards()
 		{
@@ -43,9 +90,11 @@ namespace AtomosZ.Gambal.Poker
 			StartCoroutine(DealCardsTo(cardCount, players[currentPlayerIndex]));
 		}
 
-		public Player GetCurrentPlayer()
+		public bool IsPlayersTurn(Player player)
 		{
-			return players[currentPlayerIndex];
+			if (currentPlayerIndex != -1)
+				return player == players[currentPlayerIndex];
+			return false;
 		}
 
 
@@ -56,7 +105,7 @@ namespace AtomosZ.Gambal.Poker
 		/// <returns>false when too many cards selected</returns>
 		public bool SetCardSelected(CardInHand cardInHand)
 		{
-			if (cardsSelected.Count >= PokerRules.MaxCardReplaceAmount)
+			if (cardsSelected.Count >= pokerRules.MaxCardDrawAmount)
 			{
 				return false;
 			}
@@ -97,36 +146,12 @@ namespace AtomosZ.Gambal.Poker
 
 		private void NextPlayer()
 		{
-			if (deck.InsufficientCards(1))
-			{
-				// end game
-				Debug.Log("No more cards; End game.");
-
-				return;
-			}
-
 			players[currentPlayerIndex++].EndTurn();
 			if (currentPlayerIndex >= players.Count)
 				currentPlayerIndex = 0;
 			players[currentPlayerIndex].StartTurn();
 		}
 
-		/// <summary>
-		/// Deal a full hand to all players.
-		/// </summary>
-		private IEnumerator Deal()
-		{
-			for (int i = 0; i < PokerRules.MaxCardsInHand; ++i)
-			{
-				foreach (Player player in players)
-				{
-					player.AddCardToHand(deck.DrawCard());
-					yield return new WaitForSeconds(.3f);
-				}
-			}
 
-			currentPlayerIndex = 0;
-			players[currentPlayerIndex].StartTurn();
-		}
 	}
 }

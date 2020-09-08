@@ -39,10 +39,12 @@ namespace AtomosZ.Gambal.Poker
 			{
 				if (suit == Suit.Blank)
 					continue;
-				if (suit == Suit.Joker && useJokers)
+				if (suit == Suit.Joker)
 				{
-						deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_0")));
-						deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_1")));
+					if (!useJokers)
+						continue;
+					deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_0")));
+					deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_1")));
 				}
 				else
 				{
@@ -68,7 +70,10 @@ namespace AtomosZ.Gambal.Poker
 								break;
 						}
 
-						deck.Add(new Card(suit, i, deckAtlas.GetSprite(suit + value)));
+						Sprite sprite = deckAtlas.GetSprite(suit + value);
+						if (sprite == null)
+							throw new System.Exception("No texture found for " + suit + " " + value);
+						deck.Add(new Card(suit, i, sprite));
 					}
 				}
 			}

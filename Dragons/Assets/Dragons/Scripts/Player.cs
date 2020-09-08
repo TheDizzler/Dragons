@@ -7,13 +7,17 @@ namespace AtomosZ.Gambal.Poker
 	public class Player : MonoBehaviour
 	{
 		public int funds = 100;
-		public int amountPaidOfRaise = 0;
 
 		[SerializeField] private HandVisualizer handPanel = null;
 
 		private List<Card> hand = new List<Card>();
 
 
+		public void Start()
+		{
+			handPanel.SetOwner(this);
+			handPanel.SetFundsText(funds);
+		}
 
 		public void AddCardToHand(Card newcard)
 		{
@@ -23,7 +27,7 @@ namespace AtomosZ.Gambal.Poker
 
 		private void CheckBestHand()
 		{
-			
+
 		}
 
 		public void EndTurn()
@@ -50,6 +54,18 @@ namespace AtomosZ.Gambal.Poker
 		{
 			handPanel.SetActiveTurn(true);
 			CheckBestHand();
+		}
+
+		public int SubtractFunds(int anteAmount)
+		{
+			if (funds < anteAmount)
+			{
+				Debug.LogWarning(name + " must drop out!");
+			}
+
+			handPanel.MoneyChanged(-anteAmount);
+			funds -= anteAmount;
+			return anteAmount;
 		}
 	}
 }

@@ -46,11 +46,12 @@ namespace AtomosZ.Gambal.Poker
 		public void NullifyCard()
 		{
 			card = Deck.nullCard;
+			GetComponent<Image>().color = NormalColor;
 		}
 
 		void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 		{
-			if (owner == dealer.GetCurrentPlayer())
+			if (dealer.IsPlayersTurn(owner))
 				Select();
 		}
 
