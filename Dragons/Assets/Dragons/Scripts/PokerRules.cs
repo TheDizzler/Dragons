@@ -9,6 +9,7 @@ namespace AtomosZ.Gambal.Poker
 		public int MaxDrawsAllowed = 3;
 
 		public int ante = 1;
+		public int maxRaise = 100;
 
 		public bool useJokers = false;
 

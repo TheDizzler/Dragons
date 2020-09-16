@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,24 +11,33 @@ namespace AtomosZ.Gambal.Poker
 	/// </summary>
 	public class Dealer : MonoBehaviour
 	{
-		public int totalBets = 0;
-		public int totalRaise = 0;
+		public PokerRules pokerRules = null;
 
-		[SerializeField] private PokerRules pokerRules = null;
+
 		[SerializeField] private Deck deck = null;
 		[SerializeField] private Pot pot = null;
-		[SerializeField] private List<Player> players = null;
+		[SerializeField] private Betting betting = null;
+		[SerializeField] private Player[] players = null;
 
 		private int currentPlayerIndex = -1;
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
 		private PokerRules.TurnPhase phase = PokerRules.TurnPhase.Dealer;
+		private Dictionary<Player, int> amountMatchedThisRound = new Dictionary<Player, int>();
+		private int totalRaiseAmount;
 
 
 		public void Start()
 		{
-			foreach (GameObject playerGO in GameObject.FindGameObjectsWithTag("Player"))
+			pokerRules = GetComponent<PokerRules>();
+
+			GameObject[] playersGO = GameObject.FindGameObjectsWithTag("Player");
+			players = new Player[playersGO.Length];
+			foreach (GameObject playerGO in playersGO)
 			{
-				players.Add(playerGO.GetComponent<Player>());
+				int.TryParse(playerGO.name.Substring(6), out int playerNum);
+				Player player = playerGO.GetComponent<Player>();
+				players[playerNum - 1] = player;
+				amountMatchedThisRound[player] = 0;
 			}
 
 			deck.CreateDeck(pokerRules.useJokers);
@@ -37,6 +47,7 @@ namespace AtomosZ.Gambal.Poker
 			StartCoroutine(StartGame());
 		}
 
+
 		private IEnumerator StartGame()
 		{
 			yield return StartCoroutine(Deal());
@@ -44,7 +55,7 @@ namespace AtomosZ.Gambal.Poker
 
 			phase = PokerRules.TurnPhase.Bet;
 			currentPlayerIndex = 0;
-			players[currentPlayerIndex].StartTurn();
+			players[currentPlayerIndex].StartTurn(betting, 0);
 		}
 
 		/// <summary>
@@ -57,7 +68,7 @@ namespace AtomosZ.Gambal.Poker
 				foreach (Player player in players)
 				{
 					player.AddCardToHand(deck.DrawCard());
-					yield return new WaitForSeconds(.3f);
+					yield return new WaitForSeconds(.1f);
 				}
 			}
 		}
@@ -71,16 +82,6 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
-
-		//void Update()
-		//{
-		//	switch (phase)
-		//	{
-		//		case PokerRules.TurnPhase.Bet:
-
-		//			break;
-		//	}
-		//}
 
 		public void ReplaceCards()
 		{
@@ -141,17 +142,33 @@ namespace AtomosZ.Gambal.Poker
 				player.AddCardToHand(deck.DrawCard());
 			}
 
-			NextPlayer();
+			NextPlayerBet();
 		}
 
-		private void NextPlayer()
+		private void NextPlayerBet()
 		{
 			players[currentPlayerIndex++].EndTurn();
-			if (currentPlayerIndex >= players.Count)
+			if (currentPlayerIndex >= players.Length)
 				currentPlayerIndex = 0;
-			players[currentPlayerIndex].StartTurn();
+
+			int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
+
+			players[currentPlayerIndex].StartTurn(betting, totalRaiseAmount - amtMatched);
 		}
 
+		public void RaiseBet(Player raisingPlayer, int amtRaised, int matched)
+		{
+			totalRaiseAmount += amtRaised;
+			pot.DisplayRaiseAmount(totalRaiseAmount);
+			amountMatchedThisRound[raisingPlayer] += amtRaised + matched;
+			pot.AddToPot(amtRaised + matched);
+			StartCoroutine(DelayedFunction());
+		}
 
+		private IEnumerator DelayedFunction()
+		{
+			yield return new WaitForSeconds(.5f);
+			NextPlayerBet();
+		}
 	}
 }
