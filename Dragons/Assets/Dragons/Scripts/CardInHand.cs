@@ -43,8 +43,13 @@ namespace AtomosZ.Gambal.Poker
 			owner = player;
 			GetComponent<Image>().sprite = card.sprite;
 
-			startPosY = transform.position.y;
-			selectPosY = startPosY + selectPosYOffset;
+			if (isSelected)
+				Deselect();
+			else
+			{
+				startPosY = transform.position.y;
+				selectPosY = startPosY + selectPosYOffset;
+			}
 		}
 
 		public void NullifyCard()
@@ -84,12 +89,9 @@ namespace AtomosZ.Gambal.Poker
 			}
 			else
 			{
-				isSelected = false;
-				GetComponent<Image>().color = NormalColor;
-				sliding = StartCoroutine(SlideDown());
+				Deselect();
 				dealer.UnsetCardSelected(this);
 			}
-
 		}
 
 		public void SetPosition(Vector3 newpos)
@@ -99,12 +101,12 @@ namespace AtomosZ.Gambal.Poker
 			selectPosY = startPosY + selectPosYOffset;
 		}
 
-		public void Deselect()
+		private void Deselect()
 		{
-			GetComponent<Image>().color = Color.white;
+			isSelected = false;
+			GetComponent<Image>().color = NormalColor;
+			sliding = StartCoroutine(SlideDown());
 		}
-
-
 
 		private IEnumerator SlideUp()
 		{

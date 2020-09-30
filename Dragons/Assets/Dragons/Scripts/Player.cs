@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +34,6 @@ namespace AtomosZ.Gambal.Poker
 		public void EndTurn()
 		{
 			handPanel.SetActiveTurn(false);
-			CheckBestHand();
 		}
 
 		public void RemoveCards(List<CardInHand> cardsSelected)
@@ -50,6 +50,13 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
+
+		public void StartDraw()
+		{
+			handPanel.SetActiveTurn(true);
+		}
+
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -59,7 +66,6 @@ namespace AtomosZ.Gambal.Poker
 		{
 			betting.SetPlayer(this, matchNeeded);
 			handPanel.SetActiveTurn(true);
-			CheckBestHand();
 		}
 
 		public int SubtractFunds(int anteAmount)

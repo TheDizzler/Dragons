@@ -17,12 +17,13 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Deck deck = null;
 		[SerializeField] private Pot pot = null;
 		[SerializeField] private Betting betting = null;
+		[SerializeField] private GameObject drawButton = null;
 		[SerializeField] private TextMeshProUGUI playerNameText = null;
 		[SerializeField] private Player[] players = null;
 
 		private int currentPlayerIndex = -1;
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
-		private PokerRules.TurnPhase phase = PokerRules.TurnPhase.Dealer;
+		public PokerRules.TurnPhase phase = PokerRules.TurnPhase.Dealer;
 		private Dictionary<Player, int> amountMatchedThisRound = new Dictionary<Player, int>();
 
 		private int totalRaiseAmount;
@@ -59,7 +60,7 @@ namespace AtomosZ.Gambal.Poker
 
 			phase = PokerRules.TurnPhase.Bet;
 			currentPlayerIndex = 0;
-			players[currentPlayerIndex].StartBetting(betting, 0);
+			StartPlayerTurn();
 		}
 
 		/// <summary>
@@ -152,16 +153,19 @@ namespace AtomosZ.Gambal.Poker
 				player.AddCardToHand(deck.DrawCard());
 			}
 
-			PlayerTurn();
+			EndPlayerTurn();
+			StartPlayerTurn();
 		}
 
-		private void PlayerTurn()
+		private void StartPlayerTurn()
 		{
 			playerNameText.text = players[currentPlayerIndex].name;
 
 			switch (phase)
 			{
 				case PokerRules.TurnPhase.Draw:
+					drawButton.SetActive(true);
+					players[currentPlayerIndex].StartDraw();
 
 					break;
 
@@ -173,12 +177,12 @@ namespace AtomosZ.Gambal.Poker
 					else if (lastRaiser == players[currentPlayerIndex])
 					{ // betting phase is done
 						StartDrawPhase();
+						break;
 					}
-					else
-					{
-						int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
-						players[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
-					}
+
+					int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
+					players[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
+
 
 					break;
 			}
@@ -203,7 +207,7 @@ namespace AtomosZ.Gambal.Poker
 		private IEnumerator DelayedFunction()
 		{
 			yield return new WaitForSeconds(.5f);
-			PlayerTurn();
+			StartPlayerTurn();
 		}
 
 
@@ -219,7 +223,7 @@ namespace AtomosZ.Gambal.Poker
 			EndPlayerTurn();
 			phase = PokerRules.TurnPhase.Draw;
 			currentPlayerIndex = 0;
-			PlayerTurn();
+			StartPlayerTurn();
 		}
 	}
 }
