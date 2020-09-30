@@ -83,6 +83,12 @@ namespace AtomosZ.Gambal.Poker
 		}
 
 
+		public PokerRules.TurnPhase CurrentPhase()
+		{
+			return phase;
+		}
+
+
 		public void ReplaceCards()
 		{
 			int cardCount = cardsSelected.Count;

@@ -51,7 +51,7 @@ namespace AtomosZ.Gambal.Poker
 
 		void IPointerClickHandler.OnPointerClick(PointerEventData eventData)
 		{
-			if (dealer.IsPlayersTurn(owner))
+			if (dealer.IsPlayersTurn(owner) && dealer.CurrentPhase() == PokerRules.TurnPhase.Draw)
 				Select();
 		}
 
