@@ -19,8 +19,8 @@ namespace AtomosZ.Gambal.Poker
 
 		public void AddToPot(int amount)
 		{
-			if (amount <= 0)
-				throw new Exception("Cannot add 0 or negative amount to pot!");
+			if (amount < 0)
+				throw new Exception("Cannot add negative amount to pot!");
 			total += amount;
 			potTotal.text = "$" + $"{total:n0}";
 		}

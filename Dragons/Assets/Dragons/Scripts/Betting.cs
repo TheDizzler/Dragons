@@ -8,6 +8,7 @@ namespace AtomosZ.Gambal.Poker
 		public Player currentPlayer;
 		[SerializeField] private GameObject placeBetPanel = null;
 		[SerializeField] private Text raiseAmountText = null;
+		[SerializeField] private Text matchAmountText = null;
 		[SerializeField] private Slider raiseSlider = null;
 		[SerializeField] private Text placeBetButtonText = null;
 		[SerializeField] private Button foldButton = null;
@@ -22,6 +23,7 @@ namespace AtomosZ.Gambal.Poker
 		void Start()
 		{
 			raiseAmountText.text = "$" + $"{amountToRaise:n0}";
+			matchAmountText.text = "$" + $"{match:n0}";
 			placeBetButtonText.text = "No Bet";
 			dealer = GetComponent<Dealer>();
 		}
@@ -31,8 +33,8 @@ namespace AtomosZ.Gambal.Poker
 		{
 			currentPlayer = player;
 			match = matchNeeded;
-			raiseSlider.minValue = matchNeeded;
-			raiseSlider.maxValue = matchNeeded + Mathf.Min(dealer.pokerRules.maxRaise, player.funds);
+			raiseSlider.minValue = 0;
+			raiseSlider.maxValue = Mathf.Min(dealer.pokerRules.maxRaise, player.funds - match);
 
 			DisplayValues();
 			placeBetPanel.SetActive(true);
@@ -41,6 +43,7 @@ namespace AtomosZ.Gambal.Poker
 		private void DisplayValues()
 		{
 			raiseAmountText.text = "$" + $"{(int)raiseSlider.value:n0}";
+			matchAmountText.text = "$" + $"{match:n0}";
 			if (amountToRaise == 0)
 			{
 				if (match != 0)
@@ -60,13 +63,13 @@ namespace AtomosZ.Gambal.Poker
 
 		public void RaiseValueChanged()
 		{
-			amountToRaise = (int)raiseSlider.value - match;
+			amountToRaise = (int)raiseSlider.value;
 			DisplayValues();
 		}
 
 		public void OnRaiseButtonClick()
 		{
-			currentPlayer.SubtractFunds((int)raiseSlider.value);
+			currentPlayer.SubtractFunds((int)raiseSlider.value + match);
 			dealer.RaiseBet(currentPlayer, amountToRaise, match);
 
 			// reset values
