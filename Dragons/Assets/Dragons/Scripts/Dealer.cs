@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,6 +17,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Deck deck = null;
 		[SerializeField] private Pot pot = null;
 		[SerializeField] private Betting betting = null;
+		[SerializeField] private TextMeshProUGUI playerNameText = null;
 		[SerializeField] private Player[] players = null;
 
 		private int currentPlayerIndex = -1;

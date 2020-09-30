@@ -17,6 +17,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private GameObject[] cardPlaceholders = null;
 		[SerializeField] private Text score = null;
 		[SerializeField] private GameObject fundsChangedTextPrefab = null;
+		[SerializeField] private Image bgImage = null;
 
 		private List<CardInHand> heldCards = new List<CardInHand> { null, null, null, null, null };
 		private Player owner;
@@ -81,9 +82,9 @@ namespace AtomosZ.Gambal.Poker
 		public void SetActiveTurn(bool isTurn)
 		{
 			if (isTurn)
-				GetComponent<Image>().color = turnColor;
+				bgImage.color = turnColor;
 			else
-				GetComponent<Image>().color = waitColor;
+				bgImage.color = waitColor;
 		}
 
 

@@ -8,7 +8,11 @@ namespace AtomosZ.Gambal.Poker
 {
 	public class CardInHand : MonoBehaviour, IPointerClickHandler
 	{
-		private const float selectPosYOffset = 25;
+		/// <summary>
+		/// This needs to be adaptive to the screen aspect ratio.
+		/// .5f works for 5:4
+		/// </summary>
+		private const float selectPosYOffset = .5f;
 		private static Color SelectedColor = Color.cyan;
 		private static Color NormalColor = Color.white;
 

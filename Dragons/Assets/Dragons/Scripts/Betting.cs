@@ -76,7 +76,7 @@ namespace AtomosZ.Gambal.Poker
 			amountToRaise = 0;
 			match = 0;
 			raiseSlider.value = 0;
-			placeBetPanel.SetActive(true);
+			placeBetPanel.SetActive(false);
 			currentPlayer = null;
 		}
 

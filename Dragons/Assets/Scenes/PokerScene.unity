@@ -266,7 +266,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71009076
 MonoBehaviour:
@@ -390,8 +390,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1846616087}
-  - {fileID: 1456658716}
   - {fileID: 1971882155}
+  - {fileID: 1456658716}
   - {fileID: 1616059668}
   - {fileID: 990195528}
   m_Father: {fileID: 1595769737}
@@ -2373,7 +2373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.32286957, y: 0.63022524}
   m_AnchorMax: {x: 0.52078, y: 0.6304456}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 52}
   m_SizeDelta: {x: 0, y: 0.0000023841858}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &933892526
@@ -3787,11 +3787,11 @@ RectTransform:
   - {fileID: 799335162}
   - {fileID: 1418427213}
   m_Father: {fileID: 156687897}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -41.307526}
+  m_AnchoredPosition: {x: 100, y: -71.307526}
   m_SizeDelta: {x: 200, y: 22.615055}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1456658717
@@ -4260,7 +4260,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 58.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1595769738
 MonoBehaviour:
@@ -5267,11 +5267,11 @@ RectTransform:
   - {fileID: 906964994}
   - {fileID: 1021878472}
   m_Father: {fileID: 156687897}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 100, y: -67.61505}
+  m_AnchoredPosition: {x: 100, y: -45}
   m_SizeDelta: {x: 200, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1971882156
@@ -5512,6 +5512,7 @@ MonoBehaviour:
   deck: {fileID: 2020934222}
   pot: {fileID: 2020934226}
   betting: {fileID: 2020934227}
+  playerNameText: {fileID: 241276417}
   players: []
 --- !u!4 &2020934224
 Transform:
@@ -5574,6 +5575,7 @@ MonoBehaviour:
   currentPlayer: {fileID: 0}
   placeBetPanel: {fileID: 156687896}
   raiseAmountText: {fileID: 1897765399}
+  matchAmountText: {fileID: 1021878473}
   raiseSlider: {fileID: 1456658717}
   placeBetButtonText: {fileID: 377583950}
   foldButton: {fileID: 990195529}
@@ -6455,6 +6457,7 @@ MonoBehaviour:
   score: {fileID: 8774498451998830950}
   fundsChangedTextPrefab: {fileID: 5216035870498122916, guid: 3453024d2eda1d34ca7c017d0b6e0b5d,
     type: 3}
+  bgImage: {fileID: 705913548927883954}
 --- !u!114 &3056279139228532571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6476,6 +6479,7 @@ MonoBehaviour:
   score: {fileID: 8774498452190133833}
   fundsChangedTextPrefab: {fileID: 5216035870498122916, guid: 3453024d2eda1d34ca7c017d0b6e0b5d,
     type: 3}
+  bgImage: {fileID: 705913548984833437}
 --- !u!222 &3056279139228532572
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6600,6 +6604,7 @@ MonoBehaviour:
   score: {fileID: 8774498451275186827}
   fundsChangedTextPrefab: {fileID: 5216035870498122916, guid: 3453024d2eda1d34ca7c017d0b6e0b5d,
     type: 3}
+  bgImage: {fileID: 705913546983647583}
 --- !u!224 &3056279139953656732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6802,6 +6807,7 @@ MonoBehaviour:
   score: {fileID: 8774498451085922438}
   fundsChangedTextPrefab: {fileID: 5216035870498122916, guid: 3453024d2eda1d34ca7c017d0b6e0b5d,
     type: 3}
+  bgImage: {fileID: 705913548010732370}
 --- !u!222 &3280845625221129435
 CanvasRenderer:
   m_ObjectHideFlags: 0
