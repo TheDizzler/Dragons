@@ -55,7 +55,7 @@ namespace AtomosZ.Gambal.Poker
 		/// </summary>
 		/// <param name="betting"></param>
 		/// <param name="match">Amount player has to match to stay in game. </param>
-		public void StartTurn(Betting betting, int matchNeeded)
+		public void StartBetting(Betting betting, int matchNeeded)
 		{
 			betting.SetPlayer(this, matchNeeded);
 			handPanel.SetActiveTurn(true);

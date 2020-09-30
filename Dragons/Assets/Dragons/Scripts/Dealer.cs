@@ -24,7 +24,9 @@ namespace AtomosZ.Gambal.Poker
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
 		private PokerRules.TurnPhase phase = PokerRules.TurnPhase.Dealer;
 		private Dictionary<Player, int> amountMatchedThisRound = new Dictionary<Player, int>();
+
 		private int totalRaiseAmount;
+		private Player lastRaiser = null;
 
 
 		public void Start()
@@ -51,12 +53,13 @@ namespace AtomosZ.Gambal.Poker
 
 		private IEnumerator StartGame()
 		{
+			yield return new WaitForSeconds(.1f); // make sure all objects have run their Start() methods
 			yield return StartCoroutine(Deal());
 			yield return StartCoroutine(CollectAnte());
 
 			phase = PokerRules.TurnPhase.Bet;
 			currentPlayerIndex = 0;
-			players[currentPlayerIndex].StartTurn(betting, 0);
+			players[currentPlayerIndex].StartBetting(betting, 0);
 		}
 
 		/// <summary>
@@ -149,33 +152,74 @@ namespace AtomosZ.Gambal.Poker
 				player.AddCardToHand(deck.DrawCard());
 			}
 
-			NextPlayerBet();
+			PlayerTurn();
 		}
 
-		private void NextPlayerBet()
+		private void PlayerTurn()
 		{
-			players[currentPlayerIndex++].EndTurn();
-			if (currentPlayerIndex >= players.Length)
-				currentPlayerIndex = 0;
+			playerNameText.text = players[currentPlayerIndex].name;
 
-			int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
+			switch (phase)
+			{
+				case PokerRules.TurnPhase.Draw:
 
-			players[currentPlayerIndex].StartTurn(betting, totalRaiseAmount - amtMatched);
+					break;
+
+				case PokerRules.TurnPhase.Bet:
+					if (lastRaiser == null)
+					{ // this is the first bet
+						lastRaiser = players[currentPlayerIndex];
+					}
+					else if (lastRaiser == players[currentPlayerIndex])
+					{ // betting phase is done
+						StartDrawPhase();
+					}
+					else
+					{
+						int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
+						players[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
+					}
+
+					break;
+			}
 		}
+
 
 		public void RaiseBet(Player raisingPlayer, int amtRaised, int matched)
 		{
-			totalRaiseAmount += amtRaised;
-			pot.DisplayRaiseAmount(totalRaiseAmount);
+			if (amtRaised > 0)
+			{
+				totalRaiseAmount += amtRaised;
+				lastRaiser = raisingPlayer;
+				pot.DisplayRaiseAmount(totalRaiseAmount);
+			}
+
 			amountMatchedThisRound[raisingPlayer] += amtRaised + matched;
 			pot.AddToPot(amtRaised + matched);
+			EndPlayerTurn();
 			StartCoroutine(DelayedFunction());
 		}
 
 		private IEnumerator DelayedFunction()
 		{
 			yield return new WaitForSeconds(.5f);
-			NextPlayerBet();
+			PlayerTurn();
+		}
+
+
+		private void EndPlayerTurn()
+		{
+			players[currentPlayerIndex++].EndTurn();
+			if (currentPlayerIndex >= players.Length)
+				currentPlayerIndex = 0;
+		}
+
+		private void StartDrawPhase()
+		{
+			EndPlayerTurn();
+			phase = PokerRules.TurnPhase.Draw;
+			currentPlayerIndex = 0;
+			PlayerTurn();
 		}
 	}
 }
