@@ -49,7 +49,6 @@ namespace AtomosZ.Gambal.Poker
 				GameObject pgo = Instantiate(playerPrefab);
 				pgo.name = "Player " + (i + 1);
 				Player player = pgo.GetComponent<Player>();
-				amountMatchedThisRound[player] = 0;
 				players[i] = player;
 
 				GameObject handPanelgo = Instantiate(playerHandPrefab, handHolder.transform);
@@ -63,12 +62,24 @@ namespace AtomosZ.Gambal.Poker
 
 		private IEnumerator StartGame()
 		{
-			firstPlayerToDrawCards = null;
-			lastRaiser = null;
-
-			foreach (var player in players)
+			List<Player> p = new List<Player>();
+			for (int i = 0; i < players.Length; ++i)
 			{
-				player.ResetHand();
+				if (players[i].funds <= 0)
+				{ // boot the player
+					players[i].RemoveFromGame();
+					Destroy(players[i].gameObject);
+					continue;
+				}
+
+				p.Add(players[i]);
+				players[i].ResetHand();
+			}
+
+			players = p.ToArray();
+			if (players.Length <= 1)
+			{
+				throw new Exception("Insufficient players");
 			}
 
 			deck.CreateDeck(pokerRules.useJokers);
@@ -81,11 +92,11 @@ namespace AtomosZ.Gambal.Poker
 			yield return StartCoroutine(Deal());
 			yield return StartCoroutine(CollectAnte());
 
-			phase = PokerRules.TurnPhase.Bet;
-			currentPlayerIndex = 0;
 			drawPhaseCount = 0;
-			StartPlayerTurn();
+			StartBetPhase();
 		}
+
+
 
 
 		/// <summary>
@@ -284,7 +295,11 @@ namespace AtomosZ.Gambal.Poker
 		{
 			phase = PokerRules.TurnPhase.Bet;
 			currentPlayerIndex = 0;
+			totalRaiseAmount = 0;
 			lastRaiser = null;
+			amountMatchedThisRound.Clear();
+			foreach (var player in activePlayers)
+				amountMatchedThisRound[player] = 0;
 			StartPlayerTurn();
 		}
 

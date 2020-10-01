@@ -7,7 +7,6 @@ namespace AtomosZ.Gambal.Poker
 	public class Player : MonoBehaviour
 	{
 		public int funds = 100;
-
 		public HandVisualizer handPanel = null;
 
 		private List<Card> hand = new List<Card>();
@@ -98,6 +97,11 @@ namespace AtomosZ.Gambal.Poker
 		public void Fold()
 		{
 			handPanel.Fold();
+		}
+
+		public void RemoveFromGame()
+		{
+			Destroy(handPanel.gameObject);
 		}
 	}
 }
