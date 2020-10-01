@@ -28,6 +28,7 @@ namespace AtomosZ.Gambal.Poker
 
 		private int totalRaiseAmount;
 		private Player lastRaiser = null;
+		private Player firstPlayerToDrawCards = null;
 
 
 		public void Start()
@@ -99,7 +100,7 @@ namespace AtomosZ.Gambal.Poker
 			int cardCount = cardsSelected.Count;
 			players[currentPlayerIndex].RemoveCards(cardsSelected);
 			cardsSelected.Clear();
-			StartCoroutine(DealCardsTo(cardCount, players[currentPlayerIndex]));
+			StartCoroutine(DealNewCardsTo(cardCount, players[currentPlayerIndex]));
 		}
 
 		public bool IsPlayersTurn(Player player)
@@ -145,7 +146,7 @@ namespace AtomosZ.Gambal.Poker
 		}
 
 
-		private IEnumerator DealCardsTo(int cardCount, Player player)
+		private IEnumerator DealNewCardsTo(int cardCount, Player player)
 		{
 			for (int i = 0; i < cardCount; ++i)
 			{
@@ -164,6 +165,17 @@ namespace AtomosZ.Gambal.Poker
 			switch (phase)
 			{
 				case PokerRules.TurnPhase.Draw:
+					if (firstPlayerToDrawCards == null)
+					{
+						firstPlayerToDrawCards = players[currentPlayerIndex];
+					}
+					else if (firstPlayerToDrawCards == players[currentPlayerIndex])
+					{
+						EndPlayerTurn();
+						StartBetPhase();
+						break;
+					}
+
 					drawButton.SetActive(true);
 					players[currentPlayerIndex].StartDraw();
 
@@ -176,6 +188,7 @@ namespace AtomosZ.Gambal.Poker
 					}
 					else if (lastRaiser == players[currentPlayerIndex])
 					{ // betting phase is done
+						EndPlayerTurn();
 						StartDrawPhase();
 						break;
 					}
@@ -216,13 +229,23 @@ namespace AtomosZ.Gambal.Poker
 			players[currentPlayerIndex++].EndTurn();
 			if (currentPlayerIndex >= players.Length)
 				currentPlayerIndex = 0;
+			drawButton.SetActive(false);
 		}
+
+		private void StartBetPhase()
+		{
+			phase = PokerRules.TurnPhase.Bet;
+			currentPlayerIndex = 0;
+			lastRaiser = null;
+			StartPlayerTurn();
+		}
+
 
 		private void StartDrawPhase()
 		{
-			EndPlayerTurn();
 			phase = PokerRules.TurnPhase.Draw;
 			currentPlayerIndex = 0;
+			firstPlayerToDrawCards = null;
 			StartPlayerTurn();
 		}
 	}
