@@ -29,6 +29,7 @@ namespace AtomosZ.Gambal.Poker
 		private int totalRaiseAmount;
 		private Player lastRaiser = null;
 		private Player firstPlayerToDrawCards = null;
+		private int drawPhaseCount = 0;
 
 
 		public void Start()
@@ -61,6 +62,7 @@ namespace AtomosZ.Gambal.Poker
 
 			phase = PokerRules.TurnPhase.Bet;
 			currentPlayerIndex = 0;
+			drawPhaseCount = 0;
 			StartPlayerTurn();
 		}
 
@@ -196,7 +198,6 @@ namespace AtomosZ.Gambal.Poker
 					int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
 					players[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
 
-
 					break;
 			}
 		}
@@ -243,10 +244,23 @@ namespace AtomosZ.Gambal.Poker
 
 		private void StartDrawPhase()
 		{
-			phase = PokerRules.TurnPhase.Draw;
-			currentPlayerIndex = 0;
-			firstPlayerToDrawCards = null;
-			StartPlayerTurn();
+			if (++drawPhaseCount >= pokerRules.MaxDrawsAllowed)
+			{
+				// no more draws. Call game.
+				CallGame();
+			}
+			else
+			{
+				phase = PokerRules.TurnPhase.Draw;
+				currentPlayerIndex = 0;
+				firstPlayerToDrawCards = null;
+				StartPlayerTurn();
+			}
+		}
+
+		private void CallGame()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
