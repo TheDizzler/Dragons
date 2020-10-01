@@ -35,6 +35,7 @@ namespace AtomosZ.Gambal.Poker
 		public void CreateDeck(bool useJokers)
 		{
 			nullCard = new Card(Suit.Blank, -1, deckAtlas.GetSprite("CardPlaceholder"));
+			deck.Clear();
 			foreach (Suit suit in (Suit[])System.Enum.GetValues(typeof(Suit)))
 			{
 				if (suit == Suit.Blank)
@@ -73,6 +74,7 @@ namespace AtomosZ.Gambal.Poker
 						Sprite sprite = deckAtlas.GetSprite(suit + value);
 						if (sprite == null)
 							throw new System.Exception("No texture found for " + suit + " " + value);
+						
 						deck.Add(new Card(suit, i, sprite));
 					}
 				}
