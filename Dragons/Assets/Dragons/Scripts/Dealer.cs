@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -12,6 +13,7 @@ namespace AtomosZ.Gambal.Poker
 	public class Dealer : MonoBehaviour
 	{
 		public PokerRules pokerRules = null;
+		public int playerNum = 3;
 
 
 		[SerializeField] private Deck deck = null;
@@ -39,14 +41,18 @@ namespace AtomosZ.Gambal.Poker
 		{
 			pokerRules = GetComponent<PokerRules>();
 
-			GameObject[] playersGO = GameObject.FindGameObjectsWithTag("Player");
-			players = new Player[playersGO.Length];
-			foreach (GameObject playerGO in playersGO)
+
+			players = new Player[playerNum];
+			for (int i = 0; i < playerNum; ++i)
 			{
-				int.TryParse(playerGO.name.Substring(6), out int playerNum);
-				Player player = playerGO.GetComponent<Player>();
-				players[playerNum - 1] = player;
+				GameObject pgo = Instantiate(playerPrefab);
+				pgo.name = "Player " + (i + 1);
+				Player player = pgo.GetComponent<Player>();
 				amountMatchedThisRound[player] = 0;
+				players[i] = player;
+
+				GameObject handPanelgo = Instantiate(playerHandPrefab, handHolder.transform);
+				player.handPanel = handPanelgo.GetComponent<HandVisualizer>();
 			}
 
 			deck.CreateDeck(pokerRules.useJokers);

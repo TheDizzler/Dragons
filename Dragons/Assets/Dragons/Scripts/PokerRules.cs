@@ -4,6 +4,8 @@ namespace AtomosZ.Gambal.Poker
 {
 	public class PokerRules : MonoBehaviour
 	{
+		public int MinPlayers = 2;
+		public int MaxPlayers = 6;
 		public int MaxCardsInHand = 5;
 		public int MaxCardDrawAmount = 3;
 		public int MaxDrawsAllowed = 3;
