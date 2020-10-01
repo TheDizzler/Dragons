@@ -9,7 +9,7 @@ namespace AtomosZ.Gambal.Poker
 	{
 		public int funds = 100;
 
-		[SerializeField] private HandVisualizer handPanel = null;
+		public HandVisualizer handPanel = null;
 
 		private List<Card> hand = new List<Card>();
 

@@ -19,6 +19,9 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Betting betting = null;
 		[SerializeField] private GameObject drawButton = null;
 		[SerializeField] private TextMeshProUGUI playerNameText = null;
+		[SerializeField] private GameObject handHolder = null;
+		[SerializeField] private GameObject playerPrefab = null;
+		[SerializeField] private GameObject playerHandPrefab = null;
 		[SerializeField] private Player[] players = null;
 
 		private int currentPlayerIndex = -1;

@@ -10,9 +10,9 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Text raiseAmountText = null;
 		[SerializeField] private Text matchAmountText = null;
 		[SerializeField] private Slider raiseSlider = null;
-		[SerializeField] private Text placeBetButtonText = null;
 		[SerializeField] private Button foldButton = null;
 		[SerializeField] private Button placeBetButton = null;
+		[SerializeField] private Text placeBetButtonText = null;
 
 		private Dealer dealer;
 

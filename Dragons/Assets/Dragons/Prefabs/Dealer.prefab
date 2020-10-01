@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7193112045231310809
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7193112045231310788}
+  - component: {fileID: 7193112045231310789}
+  - component: {fileID: 7193112045231310811}
+  - component: {fileID: 7193112045231310810}
+  - component: {fileID: 7193112045231310790}
+  - component: {fileID: 7193112045231310791}
+  m_Layer: 0
+  m_Name: Dealer
+  m_TagString: Dealer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7193112045231310788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7193112045231310789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9962ad2c169982442afb4ef9031f0c4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MinPlayers: 2
+  MaxPlayers: 6
+  MaxCardsInHand: 5
+  MaxCardDrawAmount: 3
+  MaxDrawsAllowed: 3
+  ante: 1
+  maxRaise: 100
+  useJokers: 0
+--- !u!114 &7193112045231310811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295ce377691bd0841b8e08df43dd8be1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pokerRules: {fileID: 7193112045231310789}
+  deck: {fileID: 7193112045231310810}
+  pot: {fileID: 7193112045231310790}
+  betting: {fileID: 7193112045231310791}
+  drawButton: {fileID: 0}
+  playerNameText: {fileID: 0}
+  playerPrefab: {fileID: 2321365084416571572, guid: d1b786c5389ba3d479509d586a9eb593,
+    type: 3}
+  playerHandPrefab: {fileID: 5626224821211129094, guid: a4b9434d4d2692942bec9d294f7897ad,
+    type: 3}
+  players: []
+  phase: 0
+--- !u!114 &7193112045231310810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15d681181579c3469201431269561b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deckAtlas: {fileID: 4343727234628468602, guid: 9c208fb2ae619d140b605533e6ead6fc,
+    type: 2}
+--- !u!114 &7193112045231310790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7889d6890bfe5a8458e08ac77a710f1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  potTotal: {fileID: 0}
+  currentRaise: {fileID: 0}
+--- !u!114 &7193112045231310791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7193112045231310809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cab3dd512b91084d86ca56e387760e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPlayer: {fileID: 0}
+  placeBetPanel: {fileID: 0}
+  raiseAmountText: {fileID: 0}
+  matchAmountText: {fileID: 0}
+  raiseSlider: {fileID: 0}
+  foldButton: {fileID: 0}
+  placeBetButton: {fileID: 0}
+  placeBetButtonText: {fileID: 0}
