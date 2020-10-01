@@ -11,7 +11,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Text currentRaise = null;
 
 
-		void Start()
+		public void ResetPot()
 		{
 			potTotal.text = "$" + $"{total:n0}";
 			currentRaise.text = "$" + $"{total:n0}";
@@ -28,6 +28,13 @@ namespace AtomosZ.Gambal.Poker
 		public void DisplayRaiseAmount(int totalRaiseAmount)
 		{
 			currentRaise.text = "$" + $"{totalRaiseAmount:n0}";
+		}
+
+		public int GetWinnings()
+		{
+			int winnings = total;
+			total = 0;
+			return winnings;
 		}
 	}
 }

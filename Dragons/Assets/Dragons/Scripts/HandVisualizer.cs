@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -37,6 +36,15 @@ namespace AtomosZ.Gambal.Poker
 			owner = player;
 		}
 
+
+		public void ResetHand()
+		{
+			for (int i = 0; i < heldCards.Count; ++i)
+			{
+				RemoveCard(heldCards[i]);
+			}
+		}
+
 		public void SetFundsText(int funds)
 		{
 			score.text = "$" + funds;
@@ -66,13 +74,20 @@ namespace AtomosZ.Gambal.Poker
 
 			int i = heldCards.IndexOf(inHand);
 			heldCards[i] = null;
-			inHand.NullifyCard();
+			if (inHand != null)
+				inHand.NullifyCard();
+		}
+
+		public void Fold()
+		{
+			foreach (var card in heldCards)
+				card.NullifyCard();
 		}
 
 		public void MoneyChanged(int amount)
 		{
 			score.text = "$" + owner.funds;
-			StartCoroutine(MoneyDrain(amount));
+			StartCoroutine(FundsChangedAnimation(amount));
 		}
 
 		private void SetScore(int newScore)
@@ -89,12 +104,13 @@ namespace AtomosZ.Gambal.Poker
 		}
 
 
-		private IEnumerator MoneyDrain(int amountDrained)
+		private IEnumerator FundsChangedAnimation(int amountChanged)
 		{
 			float timeToDrain = 1;
 			GameObject label = Instantiate(fundsChangedTextPrefab, transform.parent.parent.parent);
 			label.transform.position = score.transform.position + (Vector3)((RectTransform)score.transform).sizeDelta * .5f;
-			label.GetComponent<TextMeshProUGUI>().text = "$" + amountDrained;
+			label.GetComponent<TextMeshProUGUI>().text = "$" + amountChanged;
+			label.GetComponent<TextMeshProUGUI>().color = amountChanged > 0 ? Color.green : Color.red;
 			while (timeToDrain > 0)
 			{
 				yield return null;

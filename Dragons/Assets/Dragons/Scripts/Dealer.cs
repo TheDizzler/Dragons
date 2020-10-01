@@ -24,7 +24,8 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private GameObject handHolder = null;
 		[SerializeField] private GameObject playerPrefab = null;
 		[SerializeField] private GameObject playerHandPrefab = null;
-		[SerializeField] private Player[] players = null;
+		private Player[] players = null;
+		private List<Player> activePlayers = null;
 
 		private int currentPlayerIndex = -1;
 		private List<CardInHand> cardsSelected = new List<CardInHand>();
@@ -55,9 +56,6 @@ namespace AtomosZ.Gambal.Poker
 				player.handPanel = handPanelgo.GetComponent<HandVisualizer>();
 			}
 
-			deck.CreateDeck(pokerRules.useJokers);
-			for (int i = 0; i < Random.Range(2, 6); ++i)
-				deck.Shuffle();
 
 			StartCoroutine(StartGame());
 		}
@@ -65,6 +63,20 @@ namespace AtomosZ.Gambal.Poker
 
 		private IEnumerator StartGame()
 		{
+			firstPlayerToDrawCards = null;
+			lastRaiser = null;
+
+			foreach (var player in players)
+			{
+				player.ResetHand();
+			}
+
+			deck.CreateDeck(pokerRules.useJokers);
+			for (int i = 0; i < Random.Range(2, 6); ++i)
+				deck.Shuffle();
+
+			activePlayers = new List<Player>(players);
+			pot.ResetPot();
 			yield return new WaitForSeconds(.1f); // make sure all objects have run their Start() methods
 			yield return StartCoroutine(Deal());
 			yield return StartCoroutine(CollectAnte());
@@ -75,6 +87,7 @@ namespace AtomosZ.Gambal.Poker
 			StartPlayerTurn();
 		}
 
+
 		/// <summary>
 		/// Deal a full hand to all players.
 		/// </summary>
@@ -82,17 +95,17 @@ namespace AtomosZ.Gambal.Poker
 		{
 			for (int i = 0; i < pokerRules.MaxCardsInHand; ++i)
 			{
-				foreach (Player player in players)
+				foreach (Player player in activePlayers)
 				{
 					player.AddCardToHand(deck.DrawCard());
-					yield return new WaitForSeconds(.1f);
+					yield return new WaitForSeconds(0);
 				}
 			}
 		}
 
 		private IEnumerator CollectAnte()
 		{
-			foreach (var player in players)
+			foreach (var player in activePlayers)
 			{
 				yield return new WaitForSeconds(.5f);
 				pot.AddToPot(player.SubtractFunds(pokerRules.ante));
@@ -109,15 +122,15 @@ namespace AtomosZ.Gambal.Poker
 		public void ReplaceCards()
 		{
 			int cardCount = cardsSelected.Count;
-			players[currentPlayerIndex].RemoveCards(cardsSelected);
+			activePlayers[currentPlayerIndex].RemoveCards(cardsSelected);
 			cardsSelected.Clear();
-			StartCoroutine(DealNewCardsTo(cardCount, players[currentPlayerIndex]));
+			StartCoroutine(DealNewCardsTo(cardCount, activePlayers[currentPlayerIndex]));
 		}
 
 		public bool IsPlayersTurn(Player player)
 		{
 			if (currentPlayerIndex != -1)
-				return player == players[currentPlayerIndex];
+				return player == activePlayers[currentPlayerIndex];
 			return false;
 		}
 
@@ -171,16 +184,16 @@ namespace AtomosZ.Gambal.Poker
 
 		private void StartPlayerTurn()
 		{
-			playerNameText.text = players[currentPlayerIndex].name;
+			playerNameText.text = activePlayers[currentPlayerIndex].name;
 
 			switch (phase)
 			{
 				case PokerRules.TurnPhase.Draw:
 					if (firstPlayerToDrawCards == null)
 					{
-						firstPlayerToDrawCards = players[currentPlayerIndex];
+						firstPlayerToDrawCards = activePlayers[currentPlayerIndex];
 					}
-					else if (firstPlayerToDrawCards == players[currentPlayerIndex])
+					else if (firstPlayerToDrawCards == activePlayers[currentPlayerIndex])
 					{
 						EndPlayerTurn();
 						StartBetPhase();
@@ -188,24 +201,24 @@ namespace AtomosZ.Gambal.Poker
 					}
 
 					drawButton.SetActive(true);
-					players[currentPlayerIndex].StartDraw();
+					activePlayers[currentPlayerIndex].StartDraw();
 
 					break;
 
 				case PokerRules.TurnPhase.Bet:
 					if (lastRaiser == null)
 					{ // this is the first bet
-						lastRaiser = players[currentPlayerIndex];
+						lastRaiser = activePlayers[currentPlayerIndex];
 					}
-					else if (lastRaiser == players[currentPlayerIndex])
+					else if (lastRaiser == activePlayers[currentPlayerIndex])
 					{ // betting phase is done
 						EndPlayerTurn();
 						StartDrawPhase();
 						break;
 					}
 
-					int amtMatched = amountMatchedThisRound[players[currentPlayerIndex]];
-					players[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
+					int amtMatched = amountMatchedThisRound[activePlayers[currentPlayerIndex]];
+					activePlayers[currentPlayerIndex].StartBetting(betting, totalRaiseAmount - amtMatched);
 
 					break;
 			}
@@ -224,10 +237,35 @@ namespace AtomosZ.Gambal.Poker
 			amountMatchedThisRound[raisingPlayer] += amtRaised + matched;
 			pot.AddToPot(amtRaised + matched);
 			EndPlayerTurn();
-			StartCoroutine(DelayedFunction());
+			StartCoroutine(PrepNextPlayerTurn());
 		}
 
-		private IEnumerator DelayedFunction()
+
+		public void Fold(Player currentPlayer)
+		{
+			EndPlayerTurn();
+			currentPlayer.Fold();
+			activePlayers.Remove(currentPlayer);
+			if (activePlayers.Count == 1)
+			{
+				Winner(activePlayers[0]);
+				return;
+			}
+
+			if (--currentPlayerIndex < 0)
+				currentPlayerIndex = 0;
+			StartCoroutine(PrepNextPlayerTurn());
+		}
+
+
+		private void Winner(Player player)
+		{
+			player.AddFunds(pot.GetWinnings());
+			StartCoroutine(StartGame());
+		}
+
+
+		private IEnumerator PrepNextPlayerTurn()
 		{
 			yield return new WaitForSeconds(.5f);
 			StartPlayerTurn();
@@ -236,8 +274,8 @@ namespace AtomosZ.Gambal.Poker
 
 		private void EndPlayerTurn()
 		{
-			players[currentPlayerIndex++].EndTurn();
-			if (currentPlayerIndex >= players.Length)
+			activePlayers[currentPlayerIndex++].EndTurn();
+			if (currentPlayerIndex >= activePlayers.Count)
 				currentPlayerIndex = 0;
 			drawButton.SetActive(false);
 		}

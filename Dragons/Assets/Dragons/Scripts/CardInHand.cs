@@ -55,6 +55,7 @@ namespace AtomosZ.Gambal.Poker
 		public void NullifyCard()
 		{
 			card = Deck.nullCard;
+			GetComponent<Image>().sprite = Deck.nullCard.sprite;
 			GetComponent<Image>().color = NormalColor;
 		}
 

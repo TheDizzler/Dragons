@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,8 +19,17 @@ namespace AtomosZ.Gambal.Poker
 			handPanel.SetFundsText(funds);
 		}
 
+
+		public void ResetHand()
+		{
+			handPanel.ResetHand();
+			hand.Clear();
+		}
+
 		public void AddCardToHand(Card newcard)
 		{
+			if (hand.Count >= 5)
+				throw new Exception("Player has too many cards");
 			hand.Add(newcard);
 			handPanel.AddCardToHand(newcard, this);
 		}
@@ -68,16 +76,28 @@ namespace AtomosZ.Gambal.Poker
 			handPanel.SetActiveTurn(true);
 		}
 
-		public int SubtractFunds(int anteAmount)
+		public void AddFunds(int winnings)
 		{
-			if (funds < anteAmount)
+			funds += winnings;
+			handPanel.MoneyChanged(winnings);
+		}
+
+		public int SubtractFunds(int amountChanged)
+		{
+			if (funds < amountChanged)
 			{
 				Debug.LogWarning(name + " must drop out!");
 			}
 
-			handPanel.MoneyChanged(-anteAmount);
-			funds -= anteAmount;
-			return anteAmount;
+			funds -= amountChanged;
+			handPanel.MoneyChanged(-amountChanged);
+
+			return amountChanged;
+		}
+
+		public void Fold()
+		{
+			handPanel.Fold();
 		}
 	}
 }
