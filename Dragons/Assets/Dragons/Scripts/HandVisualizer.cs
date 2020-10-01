@@ -71,6 +71,7 @@ namespace AtomosZ.Gambal.Poker
 
 		public void MoneyChanged(int amount)
 		{
+			score.text = "$" + owner.funds;
 			StartCoroutine(MoneyDrain(amount));
 		}
 
@@ -91,17 +92,17 @@ namespace AtomosZ.Gambal.Poker
 		private IEnumerator MoneyDrain(int amountDrained)
 		{
 			float timeToDrain = 1;
-			GameObject label = Instantiate(fundsChangedTextPrefab, transform);
+			GameObject label = Instantiate(fundsChangedTextPrefab, transform.parent.parent.parent);
+			label.transform.position = score.transform.position + (Vector3)((RectTransform)score.transform).sizeDelta * .5f;
 			label.GetComponent<TextMeshProUGUI>().text = "$" + amountDrained;
 			while (timeToDrain > 0)
 			{
 				yield return null;
 				timeToDrain -= Time.deltaTime;
-				label.transform.position += new Vector3(0, 10 * Time.deltaTime, 0);
+				label.transform.position += new Vector3(0, 50 * Time.deltaTime, 0);
 			}
 
 			Destroy(label);
-			score.text = "$" + owner.funds;
 		}
 	}
 }
