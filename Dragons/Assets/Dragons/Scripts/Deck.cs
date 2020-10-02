@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using Random = UnityEngine.Random;
@@ -8,6 +9,8 @@ namespace AtomosZ.Gambal.Poker
 	public class Deck : MonoBehaviour
 	{
 		public static Card nullCard;
+
+		private readonly int JokerValue = 0;
 
 		protected List<Card> deck = new List<Card>();
 		[SerializeField] private SpriteAtlas deckAtlas = null;
@@ -44,8 +47,8 @@ namespace AtomosZ.Gambal.Poker
 				{
 					if (!useJokers)
 						continue;
-					deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_0")));
-					deck.Add(new Card(suit, 0, deckAtlas.GetSprite(suit + "_1")));
+					deck.Add(new Card(suit, JokerValue, deckAtlas.GetSprite(suit + "_0")));
+					deck.Add(new Card(suit, JokerValue, deckAtlas.GetSprite(suit + "_1")));
 				}
 				else
 				{
@@ -74,7 +77,7 @@ namespace AtomosZ.Gambal.Poker
 						Sprite sprite = deckAtlas.GetSprite(suit + value);
 						if (sprite == null)
 							throw new System.Exception("No texture found for " + suit + " " + value);
-						
+
 						deck.Add(new Card(suit, i, sprite));
 					}
 				}
@@ -104,7 +107,7 @@ namespace AtomosZ.Gambal.Poker
 
 
 	[System.Serializable]
-	public class Card
+	public class Card : IComparable<Card>
 	{
 		public Suit suit;
 		public int value;
@@ -115,6 +118,24 @@ namespace AtomosZ.Gambal.Poker
 			suit = s;
 			value = val;
 			sprite = sprt;
+		}
+
+		/// <summary>
+		/// @TODO: Need to account for holding Jokers
+		/// </summary>
+		/// <param name="otherCard"></param>
+		/// <returns></returns>
+		public int CompareTo(Card otherCard)
+		{
+			if (value == otherCard.value)
+				return 0;
+			if (value == 1)
+				return 1;
+			if (otherCard.value == 1)
+				return -1;
+			if (value > otherCard.value)
+				return 1;
+			return -1;
 		}
 	};
 }

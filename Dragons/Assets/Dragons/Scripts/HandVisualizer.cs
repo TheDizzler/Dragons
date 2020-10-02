@@ -50,6 +50,12 @@ namespace AtomosZ.Gambal.Poker
 			score.text = "$" + funds;
 		}
 
+		public void AddCardsToHand(List<Card> cards, Player player)
+		{
+			foreach (var card in cards)
+				AddCardToHand(card, player);
+		}
+
 		public void AddCardToHand(Card crd, Player player)
 		{
 			for (int i = 0; i < heldCards.Count; ++i)
