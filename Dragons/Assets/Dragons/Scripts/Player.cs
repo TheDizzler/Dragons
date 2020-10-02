@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static AtomosZ.Gambal.Poker.PokerRules;
 
 namespace AtomosZ.Gambal.Poker
 {
@@ -35,12 +36,13 @@ namespace AtomosZ.Gambal.Poker
 
 		private void CheckBestHand()
 		{
-
+			new HandRank(hand);
 		}
 
 		public void EndTurn()
 		{
 			handPanel.SetActiveTurn(false);
+			CheckBestHand();
 		}
 
 		public void RemoveCards(List<CardInHand> cardsSelected)

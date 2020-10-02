@@ -9,8 +9,15 @@ namespace AtomosZ.Gambal.Poker
 	public class Deck : MonoBehaviour
 	{
 		public static Card nullCard;
+		public enum CardValue
+		{
+			Ace = 1,
+			Jack = 11,
+			Queen = 12,
+			King = 13,
+			Joker = 0,
+		}
 
-		private readonly int JokerValue = 0;
 
 		protected List<Card> deck = new List<Card>();
 		[SerializeField] private SpriteAtlas deckAtlas = null;
@@ -47,8 +54,8 @@ namespace AtomosZ.Gambal.Poker
 				{
 					if (!useJokers)
 						continue;
-					deck.Add(new Card(suit, JokerValue, deckAtlas.GetSprite(suit + "_0")));
-					deck.Add(new Card(suit, JokerValue, deckAtlas.GetSprite(suit + "_1")));
+					deck.Add(new Card(suit, (int)CardValue.Joker, deckAtlas.GetSprite(suit + "_0")));
+					deck.Add(new Card(suit, (int)CardValue.Joker, deckAtlas.GetSprite(suit + "_1")));
 				}
 				else
 				{
@@ -129,10 +136,6 @@ namespace AtomosZ.Gambal.Poker
 		{
 			if (value == otherCard.value)
 				return 0;
-			if (value == 1)
-				return 1;
-			if (otherCard.value == 1)
-				return -1;
 			if (value > otherCard.value)
 				return 1;
 			return -1;
