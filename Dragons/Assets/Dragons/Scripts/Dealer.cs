@@ -20,6 +20,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Pot pot = null;
 		[SerializeField] private Betting betting = null;
 		[SerializeField] private GameObject drawButton = null;
+		[SerializeField] private GameObject dealButton = null;
 		[SerializeField] private TextMeshProUGUI playerNameText = null;
 		[SerializeField] private GameObject handHolder = null;
 		[SerializeField] private GameObject playerPrefab = null;
@@ -56,9 +57,14 @@ namespace AtomosZ.Gambal.Poker
 			}
 
 
-			StartCoroutine(StartGame());
+			DealNewHand();
 		}
 
+		public void DealNewHand()
+		{
+			dealButton.SetActive(false);
+			StartCoroutine(StartGame());
+		}
 
 		private IEnumerator StartGame()
 		{
@@ -331,7 +337,7 @@ namespace AtomosZ.Gambal.Poker
 					Winner(winners[0]);
 			}
 
-			StartCoroutine(StartGame());
+			dealButton.SetActive(true);
 		}
 
 		private void SplitWinnings(List<Player> winners)
