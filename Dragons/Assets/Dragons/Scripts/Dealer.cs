@@ -259,20 +259,13 @@ namespace AtomosZ.Gambal.Poker
 			activePlayers.Remove(currentPlayer);
 			if (activePlayers.Count == 1)
 			{
-				Winner(activePlayers[0]);
+				ShowDown();
 				return;
 			}
 
 			if (--currentPlayerIndex < 0)
 				currentPlayerIndex = 0;
 			StartCoroutine(PrepNextPlayerTurn());
-		}
-
-
-		private void Winner(Player player)
-		{
-			player.AddFunds(pot.GetWinnings());
-			StartCoroutine(StartGame());
 		}
 
 
@@ -309,7 +302,7 @@ namespace AtomosZ.Gambal.Poker
 			if (++drawPhaseCount >= pokerRules.MaxDrawsAllowed)
 			{
 				// no more draws. Call game.
-				CallGame();
+				ShowDown();
 			}
 			else
 			{
@@ -320,9 +313,40 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
-		private void CallGame()
+		private void ShowDown()
 		{
-			throw new NotImplementedException();
+			if (activePlayers.Count == 1)
+			{
+				Winner(activePlayers[0]);
+			}
+			else
+			{
+				var winners = PokerRules.DetermineWinner(activePlayers);
+				if (winners.Count != 1)
+				{
+					Debug.Log("We have a tie game!");
+					SplitWinnings(winners);
+				}
+				else
+					Winner(winners[0]);
+			}
+
+			StartCoroutine(StartGame());
+		}
+
+		private void SplitWinnings(List<Player> winners)
+		{
+			int potTotal = pot.GetWinnings();
+			int earnings = potTotal / winners.Count;
+			int remaining = potTotal % winners.Count;
+			foreach (var player in winners)
+				player.AddFunds(earnings);
+			pot.AddToPot(remaining);
+		}
+
+		private void Winner(Player player)
+		{
+			player.AddFunds(pot.GetWinnings());
 		}
 	}
 }

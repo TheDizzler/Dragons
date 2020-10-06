@@ -43,8 +43,9 @@ namespace AtomosZ.Gambal.Poker
 			FiveOfAKind,
 		}
 
-		public class HandRank
+		public class HandRank : IComparable<HandRank>
 		{
+			public Player player;
 			public HandRanking ranking = HandRanking.HighCard;
 			/// <summary>
 			/// Value 1 == Ace.
@@ -54,11 +55,34 @@ namespace AtomosZ.Gambal.Poker
 			private List<Card> hand;
 
 
-			public HandRank(List<Card> hand)
+			public HandRank(Player player, List<Card> hand)
 			{
 				this.hand = hand;
 				hand.Sort();
 				GetBestHand();
+			}
+
+			/// <summary>
+			/// @TODO: Jokers not accounted for.
+			/// </summary>
+			/// <param name="other"></param>
+			/// <returns></returns>
+			public int CompareTo(HandRank other)
+			{
+				if (ranking == other.ranking)
+				{
+					// compare high card
+					if (highestValue == other.highestValue)
+						// high cards equal....what do??
+						return 0;
+					if (highestValue > other.highestValue)
+						return 1;
+					return -1;
+				}
+
+				if (ranking > other.ranking)
+					return 1;
+				return -1;
 			}
 
 			/// <summary>
@@ -216,6 +240,30 @@ namespace AtomosZ.Gambal.Poker
 				else
 					Debug.Log("High card: " + highestValue);
 			}
+		}
+
+		public static List<Player> DetermineWinner(List<Player> activePlayers)
+		{
+			List<Player> winners = new List<Player>();
+			HandRank bestHand = activePlayers[0].GetHandRank();
+
+			for (int i = 1; i < activePlayers.Count; ++i)
+			{
+				HandRank hand = activePlayers[i].GetHandRank();
+				int result = hand.CompareTo(bestHand);
+				if (result == 1)
+				{
+					bestHand = hand;
+					winners.Clear();
+					winners.Add(activePlayers[i]);
+				}
+				else if (result == 0)
+				{
+					winners.Add(activePlayers[i]);
+				}
+			}
+
+			return winners;
 		}
 	}
 }

@@ -34,15 +34,14 @@ namespace AtomosZ.Gambal.Poker
 			handPanel.AddCardToHand(newcard, this);
 		}
 
-		private void CheckBestHand()
+		public HandRank GetHandRank()
 		{
-			new HandRank(hand);
+			return new HandRank(this, hand);
 		}
 
 		public void EndTurn()
 		{
 			handPanel.SetActiveTurn(false);
-			CheckBestHand();
 		}
 
 		public void RemoveCards(List<CardInHand> cardsSelected)
