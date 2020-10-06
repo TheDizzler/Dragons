@@ -50,7 +50,15 @@ namespace AtomosZ.Gambal.Poker
 			/// <summary>
 			/// Value 1 == Ace.
 			/// </summary>
-			public int highestValue = 0;
+			public CardValue highestValue = CardValue.NullCard;
+			/// <summary>
+			/// value, count
+			/// </summary>
+			public Tuple<CardValue, int> firstPair = null;
+			/// <summary>
+			/// value, count
+			/// </summary>
+			public Tuple<CardValue, int> secondPair = null;
 
 			private List<Card> hand;
 
@@ -71,13 +79,92 @@ namespace AtomosZ.Gambal.Poker
 			{
 				if (ranking == other.ranking)
 				{
-					// compare high card
-					if (highestValue == other.highestValue)
-						// high cards equal....what do??
-						return 0;
-					if (highestValue > other.highestValue)
-						return 1;
-					return -1;
+					switch (ranking)
+					{
+						case HandRanking.FiveOfAKind:
+						case HandRanking.FourOfAKind:
+						case HandRanking.ThreeOfAKind:
+						case HandRanking.Pair:
+							// get highest of kind
+							int result = firstPair.Item1.CompareTo(other.firstPair.Item1);
+							if (result == 0)
+								return FindHighest(other);
+							return result;
+						case HandRanking.TwoPair:
+							CardValue highPair;
+							CardValue otherHighPair;
+							CardValue lowPair;
+							CardValue otherLowPair;
+
+							if (firstPair.Item1.CompareTo(secondPair.Item1) == 1)
+							{
+								highPair = firstPair.Item1;
+								lowPair = secondPair.Item1;
+							}
+							else
+							{
+								highPair = secondPair.Item1;
+								lowPair = firstPair.Item1;
+							}
+
+							if (other.firstPair.Item1.CompareTo(other.secondPair.Item1) == 1)
+							{
+								otherHighPair = other.firstPair.Item1;
+								otherLowPair = other.secondPair.Item1;
+							}
+							else
+							{
+								otherHighPair = other.secondPair.Item1;
+								otherLowPair = other.firstPair.Item1;
+							}
+
+							int highPairResult = highPair.CompareTo(otherHighPair);
+							if (highPairResult == 0)
+							{
+								int lowPairResult = lowPair.CompareTo(otherLowPair);
+								if (lowPairResult == 0)
+									return FindHighest(other); // if both pairs are equal, find the next highest
+								return lowPairResult;
+							}
+
+							return highPairResult;
+
+						case HandRanking.FullHouse:
+							Tuple<CardValue, int> triple;
+							Tuple<CardValue, int> otherTriple;
+							Tuple<CardValue, int> pair;
+							Tuple<CardValue, int> otherPair;
+
+							if (firstPair.Item2 == 3)
+							{
+								triple = firstPair;
+								pair = secondPair;
+							}
+							else
+							{
+								triple = secondPair;
+								pair = firstPair;
+							}
+
+							if (other.firstPair.Item2 == 3)
+							{
+								otherTriple = other.firstPair;
+								otherPair = other.secondPair;
+							}
+							else
+							{
+								otherTriple = other.secondPair;
+								otherPair = other.firstPair;
+							}
+
+
+							int tripleCompareResult = triple.Item1.CompareTo(otherTriple);
+							if (tripleCompareResult == 0)
+								return pair.Item1.CompareTo(otherPair);
+							return tripleCompareResult;
+					}
+
+					return FindHighest(other);
 				}
 
 				if (ranking > other.ranking)
@@ -86,16 +173,31 @@ namespace AtomosZ.Gambal.Poker
 			}
 
 			/// <summary>
+			/// Go through all cards until the hand with a higher card wins. If all cards equal, return 0;
+			/// </summary>
+			/// <param name="other"></param>
+			/// <returns></returns>
+			private int FindHighest(HandRank other)
+			{
+				for (int i = hand.Count - 1; i >= 0; --i)
+				{
+					int result = hand[i].CompareTo(other.hand[i]);
+					if (result == 0)
+						continue;
+					return result;
+				}
+
+				return 0;
+			}
+
+			/// <summary>
 			/// Note: cards must be ordered numerically for this to function correctly.
 			/// @TODO: Account for Jokers & wildcards (currently only supports 5 of a kind).
 			/// </summary>
 			public void GetBestHand()
 			{
-				highestValue = hand[0].value == (int)CardValue.Ace ? 1 : hand[4].value;
+				highestValue = hand[4].value;
 
-				// value, count
-				Tuple<int, int> firstPair = null;
-				Tuple<int, int> secondPair = null;
 
 				int sameValueCount = 0;
 				bool run = true;
@@ -108,9 +210,12 @@ namespace AtomosZ.Gambal.Poker
 					{
 						if (lastCard.value != (card.value - 1))
 						{
-							// check edge case with ace (ace is always a start of hand)
-							// Ace, 10, J, Q, K
-							if (!(lastCard.value == (int)CardValue.Ace && card.value == 10))
+							// check edge case with ace
+							// 10, J, Q, K, Ace
+							// 2, 3, 4, 5, Ace
+							if (!(card.value == CardValue.Ace
+									&& (lastCard.value == CardValue.King
+										|| lastCard.value == CardValue.Five)))
 								run = false;
 						}
 					}
@@ -128,24 +233,24 @@ namespace AtomosZ.Gambal.Poker
 						{
 							case 2:
 								if (firstPair == null)
-									firstPair = new Tuple<int, int>(card.value, 2);
+									firstPair = new Tuple<CardValue, int>(card.value, 2);
 								else
-									secondPair = new Tuple<int, int>(card.value, 2);
+									secondPair = new Tuple<CardValue, int>(card.value, 2);
 								break;
 
 							case 3:
 								if (firstPair.Item1 == card.value)
-									firstPair = new Tuple<int, int>(card.value, 3);
+									firstPair = new Tuple<CardValue, int>(card.value, 3);
 								else
-									secondPair = new Tuple<int, int>(card.value, 3);
+									secondPair = new Tuple<CardValue, int>(card.value, 3);
 								break;
 
 							case 4:
-								firstPair = new Tuple<int, int>(card.value, 4);
+								firstPair = new Tuple<CardValue, int>(card.value, 4);
 								break;
 
 							case 5:
-								firstPair = new Tuple<int, int>(card.value, 5);
+								firstPair = new Tuple<CardValue, int>(card.value, 5);
 								break;
 						}
 					}
@@ -164,7 +269,7 @@ namespace AtomosZ.Gambal.Poker
 				{
 					if (flush)
 					{
-						if (hand[4].value == 13)
+						if (hand[3].value == CardValue.King)
 						{
 							ranking = HandRanking.RoyalFlush;
 							Debug.Log("Royal Flush!!");
@@ -201,13 +306,12 @@ namespace AtomosZ.Gambal.Poker
 								if (secondPair.Item2 == 2)
 								{
 									ranking = HandRanking.TwoPair;
-									Debug.Log("Two pairs of " + firstPair.Item1 + " and " + secondPair.Item2
-										+ " (remaining card is important in case of tie!)");
+									Debug.Log("Two pairs of " + firstPair.Item1 + " and " + secondPair.Item1);
 								}
 								else
 								{
 									ranking = HandRanking.FullHouse;
-									Debug.Log("Full house of " + firstPair.Item1 + " and " + secondPair.Item2);
+									Debug.Log("Full house of " + firstPair.Item1 + " and " + secondPair.Item1);
 								}
 							}
 							break;
@@ -221,7 +325,7 @@ namespace AtomosZ.Gambal.Poker
 							else
 							{
 								ranking = HandRanking.FullHouse;
-								Debug.Log("Full house of " + firstPair.Item1 + " and " + secondPair.Item2);
+								Debug.Log("Full house of " + firstPair.Item1 + " and " + secondPair.Item1);
 							}
 
 							break;

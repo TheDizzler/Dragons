@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static AtomosZ.Gambal.Poker.Deck;
 using static AtomosZ.Gambal.Poker.PokerRules;
 
 namespace AtomosZ.Gambal.Poker
@@ -79,6 +80,7 @@ namespace AtomosZ.Gambal.Poker
 		public void AddFunds(int winnings)
 		{
 			funds += winnings;
+			handPanel.SetWinner();
 			handPanel.MoneyChanged(winnings);
 		}
 

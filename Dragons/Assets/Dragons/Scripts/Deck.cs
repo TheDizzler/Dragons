@@ -9,9 +9,26 @@ namespace AtomosZ.Gambal.Poker
 	public class Deck : MonoBehaviour
 	{
 		public static Card nullCard;
+
+		public enum Suit
+		{
+			Blank,
+			Hearts, Clubs, Diamonds, Spades, Joker
+		}
+
 		public enum CardValue
 		{
-			Ace = 1,
+			NullCard = -1,
+			Ace = 14, // forced to highest value in case of comparing CardValues directly (instead of through Card)
+			Two = 2,
+			Three,
+			Four,
+			Five,
+			Six,
+			Seven,
+			Eight,
+			Nine,
+			Ten,
 			Jack = 11,
 			Queen = 12,
 			King = 13,
@@ -44,7 +61,7 @@ namespace AtomosZ.Gambal.Poker
 
 		public void CreateDeck(bool useJokers)
 		{
-			nullCard = new Card(Suit.Blank, -1, deckAtlas.GetSprite("CardPlaceholder"));
+			nullCard = new Card(Suit.Blank, CardValue.NullCard, deckAtlas.GetSprite("CardPlaceholder"));
 			deck.Clear();
 			foreach (Suit suit in (Suit[])System.Enum.GetValues(typeof(Suit)))
 			{
@@ -59,25 +76,28 @@ namespace AtomosZ.Gambal.Poker
 				}
 				else
 				{
-					for (int i = 1; i <= 13; ++i)
+					foreach (CardValue cardValue in (CardValue[])System.Enum.GetValues(typeof(CardValue)))
 					{
 						string value = "_";
-						switch (i)
+						switch (cardValue)
 						{
-							case 1:
+							case CardValue.Joker:
+							case CardValue.NullCard:
+								continue;
+							case CardValue.Ace:
 								value += "A";
 								break;
-							case 11:
+							case CardValue.Jack:
 								value += "J";
 								break;
-							case 12:
+							case CardValue.Queen:
 								value += "Q";
 								break;
-							case 13:
+							case CardValue.King:
 								value += "K";
 								break;
 							default:
-								value += i;
+								value += (int)cardValue;
 								break;
 						}
 
@@ -85,7 +105,7 @@ namespace AtomosZ.Gambal.Poker
 						if (sprite == null)
 							throw new System.Exception("No texture found for " + suit + " " + value);
 
-						deck.Add(new Card(suit, i, sprite));
+						deck.Add(new Card(suit, cardValue, sprite));
 					}
 				}
 			}
@@ -103,42 +123,39 @@ namespace AtomosZ.Gambal.Poker
 		{
 			return deck.Count <= cardCount;
 		}
-	}
 
 
-	public enum Suit
-	{
-		Blank,
-		Hearts, Clubs, Diamonds, Spades, Joker
-	}
 
 
-	[System.Serializable]
-	public class Card : IComparable<Card>
-	{
-		public Suit suit;
-		public int value;
-		public Sprite sprite;
 
-		public Card(Suit s, int val, Sprite sprt)
+		[System.Serializable]
+		public class Card : IComparable<Card>
 		{
-			suit = s;
-			value = val;
-			sprite = sprt;
-		}
+			public Suit suit;
+			public CardValue value;
+			public Sprite sprite;
 
-		/// <summary>
-		/// @TODO: Need to account for holding Jokers
-		/// </summary>
-		/// <param name="otherCard"></param>
-		/// <returns></returns>
-		public int CompareTo(Card otherCard)
-		{
-			if (value == otherCard.value)
-				return 0;
-			if (value > otherCard.value)
-				return 1;
-			return -1;
+			public Card(Suit s, CardValue val, Sprite sprt)
+			{
+				suit = s;
+				value = val;
+				sprite = sprt;
+			}
+
+			/// <summary>
+			/// Aces considered highest value.
+			/// @TODO: Need to account for holding Jokers
+			/// </summary>
+			/// <param name="otherCard"></param>
+			/// <returns></returns>
+			public int CompareTo(Card otherCard)
+			{
+				if (value == otherCard.value)
+					return 0;
+				if (value > otherCard.value)
+					return 1;
+				return -1;
+			}
 		}
-	};
+	}
 }

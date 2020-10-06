@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static AtomosZ.Gambal.Poker.Deck;
 using Color = UnityEngine.Color;
 
 namespace AtomosZ.Gambal.Poker

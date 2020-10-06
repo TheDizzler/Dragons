@@ -305,6 +305,7 @@ namespace AtomosZ.Gambal.Poker
 
 		private void StartDrawPhase()
 		{
+			pot.DisplayRaiseAmount(totalRaiseAmount);
 			if (++drawPhaseCount >= pokerRules.MaxDrawsAllowed)
 			{
 				// no more draws. Call game.

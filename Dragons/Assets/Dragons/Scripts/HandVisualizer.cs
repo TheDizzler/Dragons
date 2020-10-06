@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static AtomosZ.Gambal.Poker.Deck;
 
 namespace AtomosZ.Gambal.Poker
 {
@@ -39,6 +40,7 @@ namespace AtomosZ.Gambal.Poker
 
 		public void ResetHand()
 		{
+			bgImage.color = waitColor;
 			for (int i = 0; i < heldCards.Count; ++i)
 			{
 				RemoveCard(heldCards[i]);
@@ -107,6 +109,11 @@ namespace AtomosZ.Gambal.Poker
 				bgImage.color = turnColor;
 			else
 				bgImage.color = waitColor;
+		}
+
+		public void SetWinner()
+		{
+			bgImage.color = Color.yellow;
 		}
 
 
