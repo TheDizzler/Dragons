@@ -84,13 +84,16 @@ namespace AtomosZ.Gambal.Poker
 
 		public int SubtractFunds(int amountChanged)
 		{
-			if (funds < amountChanged)
+			if (amountChanged != 0)
 			{
-				Debug.LogWarning(name + " must drop out!");
-			}
+				if (funds < amountChanged)
+				{
+					Debug.LogWarning(name + " must drop out!");
+				}
 
-			funds -= amountChanged;
-			handPanel.MoneyChanged(-amountChanged);
+				funds -= amountChanged;
+				handPanel.MoneyChanged(-amountChanged);
+			}
 
 			return amountChanged;
 		}
