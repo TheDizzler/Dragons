@@ -245,6 +245,7 @@ namespace AtomosZ.Gambal.Poker
 		public static List<Player> DetermineWinner(List<Player> activePlayers)
 		{
 			List<Player> winners = new List<Player>();
+			winners.Add(activePlayers[0]);
 			HandRank bestHand = activePlayers[0].GetHandRank();
 
 			for (int i = 1; i < activePlayers.Count; ++i)
