@@ -20,7 +20,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private Image bgImage = null;
 
 		private List<CardInHand> heldCards = new List<CardInHand> { null, null, null, null, null };
-		private Player owner;
+		private PokerPlayer owner;
 
 
 		void Start()
@@ -32,7 +32,7 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
-		public void SetOwner(Player player)
+		public void SetOwner(PokerPlayer player)
 		{
 			owner = player;
 		}
@@ -52,13 +52,13 @@ namespace AtomosZ.Gambal.Poker
 			score.text = "$" + funds;
 		}
 
-		public void AddCardsToHand(List<Card> cards, Player player)
+		public void AddCardsToHand(List<Card> cards, PokerPlayer player)
 		{
 			foreach (var card in cards)
 				AddCardToHand(card, player);
 		}
 
-		public void AddCardToHand(Card crd, Player player)
+		public void AddCardToHand(Card crd, PokerPlayer player)
 		{
 			for (int i = 0; i < heldCards.Count; ++i)
 			{

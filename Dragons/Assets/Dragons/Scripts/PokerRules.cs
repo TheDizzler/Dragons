@@ -45,7 +45,7 @@ namespace AtomosZ.Gambal.Poker
 
 		public class HandRank : IComparable<HandRank>
 		{
-			public Player player;
+			public PokerPlayer player;
 			public HandRanking ranking = HandRanking.HighCard;
 			/// <summary>
 			/// Value 1 == Ace.
@@ -63,7 +63,7 @@ namespace AtomosZ.Gambal.Poker
 			private List<Card> hand;
 
 
-			public HandRank(Player player, List<Card> hand)
+			public HandRank(PokerPlayer player, List<Card> hand)
 			{
 				this.hand = hand;
 				hand.Sort();
@@ -346,9 +346,9 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
-		public static List<Player> DetermineWinner(List<Player> activePlayers)
+		public static List<PokerPlayer> DetermineWinner(List<PokerPlayer> activePlayers)
 		{
-			List<Player> winners = new List<Player>();
+			List<PokerPlayer> winners = new List<PokerPlayer>();
 			winners.Add(activePlayers[0]);
 			HandRank bestHand = activePlayers[0].GetHandRank();
 

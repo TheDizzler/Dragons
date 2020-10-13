@@ -18,7 +18,7 @@ namespace AtomosZ.Gambal.Poker
 		private static Color NormalColor = Color.white;
 
 		private Dealer dealer;
-		private Player owner;
+		private PokerPlayer owner;
 		[SerializeField] private Card card = null;
 		private float selectSlideSpeed = 100f;
 		private float startPosY;
@@ -38,7 +38,7 @@ namespace AtomosZ.Gambal.Poker
 			return card;
 		}
 
-		public void SetCard(Card crd, Player player)
+		public void SetCard(Card crd, PokerPlayer player)
 		{
 			card = crd;
 			owner = player;

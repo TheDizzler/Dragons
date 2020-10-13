@@ -5,12 +5,11 @@ namespace AtomosZ.Gambal.Poker
 {
 	public class Betting : MonoBehaviour
 	{
-		public Player currentPlayer;
+		public PokerPlayer currentPlayer;
 		[SerializeField] private GameObject placeBetPanel = null;
 		[SerializeField] private Text raiseAmountText = null;
 		[SerializeField] private Text matchAmountText = null;
 		[SerializeField] private Slider raiseSlider = null;
-		[SerializeField] private Button placeBetButton = null;
 		[SerializeField] private Text placeBetButtonText = null;
 
 		private Dealer dealer;
@@ -29,7 +28,7 @@ namespace AtomosZ.Gambal.Poker
 		}
 
 
-		public void SetPlayer(Player player, int matchNeeded)
+		public void SetPlayer(PokerPlayer player, int matchNeeded)
 		{
 			currentPlayer = player;
 			match = matchNeeded;
