@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Mirror/Examples/Room/Scenes/OfflineScene.unity
+    guid: 9e6f14982412b2545a0911ebaaa46a23
+  - enabled: 0
+    path: Assets/Mirror/Examples/Room/Scenes/RoomScene.unity
+    guid: 48478f4d522f96945b8396f376299d3a
+  - enabled: 0
+    path: Assets/Mirror/Examples/Room/Scenes/OnlineScene.unity
+    guid: d7a6763559b31854586c9e49916273ef
+  - enabled: 1
+    path: Assets/Scenes/PokerScene.unity
+    guid: 87fa98c11c980b246a5ff1bc73ae380b
+  - enabled: 1
+    path: Assets/Scenes/GambalOfflineScene.unity
+    guid: db1bbf0fb2d7fc54faa734b3eaa0795b
+  - enabled: 1
+    path: Assets/Scenes/GambalLobbyScene.unity
+    guid: c78a3273e66c8f547b2c2d04876686c5
   m_configObjects: {}

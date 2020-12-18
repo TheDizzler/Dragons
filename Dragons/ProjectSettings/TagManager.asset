@@ -9,6 +9,8 @@ TagManager:
   - Racer
   - Waypoint
   - Track
+  - SceneInitializer
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

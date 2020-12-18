@@ -1,12 +1,13 @@
+using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Mirror.Examples.NetworkRoom
+namespace AtomosZ.Gambal.NetworkRoom
 {
     [AddComponentMenu("")]
-    public class NetworkRoomPlayerExt : NetworkRoomPlayer
+    public class GambalNetworkRoomPlayer : NetworkRoomPlayer
     {
-        static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkRoomPlayerExt));
+        static readonly ILogger logger = LogFactory.GetLogger(typeof(GambalNetworkRoomPlayer));
 
         public override void OnStartClient()
         {

@@ -9,19 +9,21 @@ namespace AtomosZ.Gambal.Poker
 {
 	public class PokerPlayer : NetworkBehaviour
 	{
-		public int funds = 100;
+		public int networkIndex;
+		public int funds { get; private set; }
 		public HandVisualizer handPanel = null;
 
 		private List<Card> hand = new List<Card>();
-
+		
 
 		public override void OnStartLocalPlayer()
 		{
-			GameObject.FindGameObjectWithTag(Tags.Dealer)
+			GameObject.FindGameObjectWithTag(Tags.SceneInitializer).GetComponent<PokerSceneInitializer>().RegisterPlayer(this);
 		}
 
-		public void Start()
+		public void Initialize(HandVisualizer panel)
 		{
+			handPanel = panel;
 			handPanel.SetOwner(this);
 			handPanel.SetFundsText(funds);
 		}
@@ -65,6 +67,12 @@ namespace AtomosZ.Gambal.Poker
 			}
 		}
 
+		public void StartingFunds(int startingAmount)
+		{
+			if (funds != 0)
+				throw new System.Exception("trying to add starting funds but funds was already set! Cheating??");
+			funds = startingAmount;
+		}
 
 		public void StartDraw()
 		{

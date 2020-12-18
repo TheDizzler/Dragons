@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
+using Mirror.Examples.NetworkRoom;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace AtomosZ.Gambal.Poker
@@ -10,10 +13,10 @@ namespace AtomosZ.Gambal.Poker
 	/// <summary>
 	/// Actually a manager class with a clever name.
 	/// </summary>
-	public class Dealer : MonoBehaviour
+	public class Dealer : NetworkBehaviour
 	{
 		public PokerRules pokerRules = null;
-		public int playerNum = 3;
+		//public int playerNum = 3;
 
 
 		[SerializeField] private Deck deck = null;
@@ -25,7 +28,7 @@ namespace AtomosZ.Gambal.Poker
 		[SerializeField] private GameObject handHolder = null;
 		[SerializeField] private GameObject playerPrefab = null;
 		[SerializeField] private GameObject playerHandPrefab = null;
-		private PokerPlayer[] players = null;
+		private List<PokerPlayer> players = null;
 		private List<PokerPlayer> activePlayers = null;
 
 		private int currentPlayerIndex = -1;
@@ -37,27 +40,34 @@ namespace AtomosZ.Gambal.Poker
 		private PokerPlayer lastRaiser = null;
 		private PokerPlayer firstPlayerToDrawCards = null;
 		private int drawPhaseCount = 0;
+		
 
 
 		public void Start()
 		{
 			pokerRules = GetComponent<PokerRules>();
 
+			//players = new PokerPlayer[playerNum];
+			//for (int i = 0; i < playerNum; ++i)
+			//{
+			//	GameObject pgo = Instantiate(playerPrefab);
+			//	pgo.name = "Player " + (i + 1);
+			//	PokerPlayer player = pgo.GetComponent<PokerPlayer>();
+			//	players[i] = player;
 
-			players = new PokerPlayer[playerNum];
-			for (int i = 0; i < playerNum; ++i)
-			{
-				GameObject pgo = Instantiate(playerPrefab);
-				pgo.name = "Player " + (i + 1);
-				PokerPlayer player = pgo.GetComponent<PokerPlayer>();
-				players[i] = player;
-
-				GameObject handPanelgo = Instantiate(playerHandPrefab, handHolder.transform);
-				player.handPanel = handPanelgo.GetComponent<HandVisualizer>();
-			}
+			//	GameObject handPanelgo = Instantiate(playerHandPrefab, handHolder.transform);
+			//	player.handPanel = handPanelgo.GetComponent<HandVisualizer>();
+			//}
+		}
 
 
-			DealNewHand();
+		public void RegisterPlayer(PokerPlayer pokerPlayer)
+		{
+			if (players == null)
+				players = new List<PokerPlayer>();
+			players.Add(pokerPlayer);
+			GameObject handPanelgo = Instantiate(playerHandPrefab, handHolder.transform);
+			pokerPlayer.Initialize(handPanelgo.GetComponent<HandVisualizer>());
 		}
 
 		public void DealNewHand()
@@ -69,7 +79,7 @@ namespace AtomosZ.Gambal.Poker
 		private IEnumerator StartGame()
 		{
 			List<PokerPlayer> p = new List<PokerPlayer>();
-			for (int i = 0; i < players.Length; ++i)
+			for (int i = 0; i < players.Count; ++i)
 			{
 				if (players[i].funds <= 0)
 				{ // boot the player
@@ -82,10 +92,11 @@ namespace AtomosZ.Gambal.Poker
 				players[i].ResetHand();
 			}
 
-			players = p.ToArray();
-			if (players.Length <= 1)
+			players = p;
+			if (players.Count <= 1)
 			{
-				throw new Exception("Insufficient players");
+				Debug.Log("Insufficient players - returning to lobby");
+				GameObject.FindGameObjectWithTag(Tags.NetworkManager).GetComponent<NetworkRoomManagerExt>().StopHost();
 			}
 
 			deck.CreateDeck(pokerRules.useJokers);

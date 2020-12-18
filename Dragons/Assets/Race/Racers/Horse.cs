@@ -17,7 +17,7 @@ namespace AtomosZ.Gambal.Keiba
 		public Image portrait;
 
 		[SerializeField] private PathCreator pathCreator = null;
-		[SerializeField] private EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop;
+		//[SerializeField] private EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Loop;
 		[SerializeField] private GameObject speedTrailsSmall = null;
 		[SerializeField] private GameObject speedTrailsBig = null;
 		[SerializeField] private GameObject particles = null;
